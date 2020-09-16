@@ -1,0 +1,15 @@
+﻿@model Category 
+
+<div>
+    <form asp-controller="Home" asp-action="NewCategory" method="post">
+        <div>
+            <label>Name</label>
+            <input asp-for="Name" />
+        </div>
+        <div>
+            <label>Description</label>
+            <input asp-for="Description" />
+        </div>
+        <input type="submit" value="Submit" />
+    </form>
+</div>
