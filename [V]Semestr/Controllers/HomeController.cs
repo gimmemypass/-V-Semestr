@@ -7,49 +7,75 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using _V_Semestr.Models;
 using _V_Semestr.Data;
+using _V_Semestr.Data.Repository;
 
 namespace _V_Semestr.Controllers
 {
     public class HomeController : Controller
     {
         //private readonly ILogger<HomeController> _logger;
-        private AppDbContext _ctx;
-        public HomeController(AppDbContext ctx)
+        private IRepository _repo;
+        public HomeController(IRepository repo)
         {
-            _ctx = ctx;
+            _repo = repo;
         }
 
         [Route("/")]
         public IActionResult Index()
         {
-            return View();
+            var posts = _repo.GetAllPosts();
+            return View(posts);
+        }
+
+        public IActionResult Post(int id)
+        {
+            var post = _repo.GetPost(id);
+            return View(post);
         }
         
         [HttpGet]
-        public IActionResult Edit()
+        public IActionResult Edit(int? id)
         {
-            return View(new Post());
+            if(id == null)
+                return View(new Post());
+            else
+            {
+                var post = _repo.GetPost((int)id);
+                return View(post);
+            }
         }
         [HttpPost]
         public async Task<IActionResult> Edit(Post post)
         {
-            _ctx.Posts.Add(post);
-            await _ctx.SaveChangesAsync();
-            return RedirectToAction("Index");
+            if (post.Id > 0)
+                _repo.UpdatePost(post);
+            else
+                _repo.AddPost(post);
+            if (await _repo.SaveChangesAsync())
+                return RedirectToAction("Index");
+            else return View(post);
         }
 
         [HttpGet]
-        public IActionResult NewCategory()
+        public async Task<IActionResult> Remove(int id)
         {
-            return View(new Category());
-        }
-        [HttpPost]
-        public async Task<IActionResult> NewCategory(Category category)
-        {
-            _ctx.Categories.Add(category);
-            await _ctx.SaveChangesAsync();
+            _repo.RemovePost(id);
+            await _repo.SaveChangesAsync();
             return RedirectToAction("Index");
         }
+
+//        [HttpGet]
+        //public IActionResult NewCategory()
+        //{
+        //    return View(new Category());
+        //}
+        //[HttpPost]
+        //public async Task<IActionResult> NewCategory(Category category)
+        //{
+        //    _ctx.Categories.Add(category);
+        //    await _ctx.SaveChangesAsync();
+        //    return RedirectToAction("Index");
+        //}
 
         public IActionResult Privacy()
         {

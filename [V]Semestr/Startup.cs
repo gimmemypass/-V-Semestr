@@ -9,6 +9,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using _V_Semestr.Data;
+using _V_Semestr.Data.Repository;
 using Microsoft.EntityFrameworkCore;
 
 namespace _V_Semestr
@@ -27,6 +28,7 @@ namespace _V_Semestr
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
+            services.AddTransient<IRepository, Repository>();
             services.AddMvc();
         }
 
