@@ -11,6 +11,9 @@ using Microsoft.Extensions.Hosting;
 using _V_Semestr.Data;
 using _V_Semestr.Data.Repository;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.AspNetCore.Identity.UI;
+using Microsoft.AspNetCore.Identity;
 
 namespace _V_Semestr
 {
@@ -28,6 +31,16 @@ namespace _V_Semestr
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
+            services.AddTransient<IRepository, Repository>();
+            services.AddDefaultIdentity<IdentityUser>(options =>
+            {
+                options.Password.RequireDigit = false;
+                options.Password.RequireNonAlphanumeric = false;
+                options.Password.RequireUppercase = false;
+                options.Password.RequiredLength = 6;
+            })
+                .AddRoles<IdentityRole>()
+                .AddEntityFrameworkStores<AppDbContext>();
             services.AddTransient<IRepository, Repository>();
             services.AddMvc();
         }
@@ -51,6 +64,7 @@ namespace _V_Semestr
             app.UseRouting();
 
             app.UseAuthorization();
+            app.UseAuthentication();
 
             app.UseEndpoints(endpoints =>
             {
