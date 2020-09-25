@@ -11,6 +11,23 @@
         <a asp-controller="Test" asp-action="Index">Test</a>
         <a asp-controller="Home" asp-action="Index">Home</a>
         <a asp-controller="Home" asp-action="Edit">New Post</a>
+        <a asp-controller="Panel" asp-action="Index">AdminPanel</a>
+        @if (User.Identity.IsAuthenticated)
+        {
+            <ul >
+
+                <li>
+                    @User.Identity.Name
+                </li>
+                <li>
+                    <a asp-controller="Auth" asp-action="Logout">Log out</a>
+                </li>
+            </ul>
+        }
+        else
+        {
+            <a asp-controller="Auth" asp-action="Login">Sign In</a>
+        }
 
     </div>
     <div>
