@@ -8,6 +8,7 @@ using Microsoft.Extensions.Logging;
 using _V_Semestr.Models;
 using _V_Semestr.Data;
 using _V_Semestr.Data.Repository;
+using _V_Semestr.Data.FileManager;
 
 namespace _V_Semestr.Controllers
 {
@@ -15,9 +16,14 @@ namespace _V_Semestr.Controllers
     {
         //private readonly ILogger<HomeController> _logger;
         private IRepository _repo;
-        public HomeController(IRepository repo)
+        private IFileManager _fileManager;
+
+        public HomeController(
+            IRepository repo,
+            IFileManager fileManager)
         {
             _repo = repo;
+            _fileManager = fileManager;
         }
 
         [Route("/")]
@@ -31,6 +37,13 @@ namespace _V_Semestr.Controllers
         {
             var post = _repo.GetPost(id);
             return View(post);
+        }
+
+        [HttpGet("/Image/{image}")]
+        public IActionResult Image(string image)
+        {
+            var mime = image.Substring(image.LastIndexOf('.') + 1);
+            return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
         
 

@@ -14,6 +14,7 @@ using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity;
+using _V_Semestr.Data.FileManager;
 
 namespace _V_Semestr
 {
@@ -49,6 +50,7 @@ namespace _V_Semestr
             //    option.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
             //});
             services.AddTransient<IRepository, Repository>();
+            services.AddTransient<IFileManager, FileManager>();
             services.AddMvc(option => option.EnableEndpointRouting = false);
             
         }
@@ -86,6 +88,7 @@ namespace _V_Semestr
             //        name: "adminPanel",
             //        pattern: "{controller=Panel}/{action=Index}/{id}");
             //});
+            app.UseStaticFiles();
             app.UseAuthentication();
             app.UseMvcWithDefaultRoute();
         }
