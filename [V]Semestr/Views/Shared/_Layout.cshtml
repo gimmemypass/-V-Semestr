@@ -10,7 +10,7 @@
     <div>
         <a asp-controller="Test" asp-action="Index">Test</a>
         <a asp-controller="Home" asp-action="Index">Home</a>
-        <a asp-controller="Home" asp-action="Edit">New Post</a>
+        <a asp-controller="Panel" asp-action="Edit">New Post</a>
         <a asp-controller="Panel" asp-action="Index">AdminPanel</a>
         @if (User.Identity.IsAuthenticated)
         {
@@ -33,5 +33,6 @@
     <div>
         @RenderBody()
     </div>
+    @RenderSection("scripts", false)
 </body>
 </html>

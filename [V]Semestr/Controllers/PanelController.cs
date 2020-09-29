@@ -47,7 +47,8 @@ namespace _V_Semestr.Controllers
                     Id = post.Id, 
                     Title = post.Title,
                     Content = post.Content,
-                    Desciption = post.Desciption
+                    Desciption = post.Desciption,
+                    CurrentImage = post.CoverImagePath
                 }) ;
             }
         }
@@ -60,8 +61,15 @@ namespace _V_Semestr.Controllers
                 Title = vm.Title,
                 Content = vm.Content,
                 Desciption = vm.Desciption,
-                CoverImagePath = await _fileManager.SaveImage(vm.CoverImagePath)
             };
+            if(vm.CoverImagePath == null)
+            {
+                post.CoverImagePath = vm.CurrentImage; 
+            }
+            else
+            {
+                post.CoverImagePath = await _fileManager.SaveImage(vm.CoverImagePath); 
+            }
             if (post.Id > 0)
                 _repo.UpdatePost(post);
             else

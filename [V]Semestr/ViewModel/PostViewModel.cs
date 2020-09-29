@@ -13,6 +13,7 @@ namespace _V_Semestr.ViewModel
         public string Title { get; set; }
         public string Content { get; set; } 
         public string Desciption { get; set; } 
+        public string CurrentImage { get; set; } 
         public IFormFile CoverImagePath { get; set; } = null;
 
     }

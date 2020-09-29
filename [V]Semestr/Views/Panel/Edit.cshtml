@@ -1,5 +1,10 @@
 ﻿@model PostViewModel
 
+@{
+
+}
+<link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.min.css" rel="stylesheet" />
+<link href="~/lib/Trumbowyg-master/dist/plugins/colors/ui/trumbowyg.colors.min.css" rel="stylesheet" />
 <div>
     <form asp-controller="Panel" asp-action="Edit" method="post" enctype="multipart/form-data">
         <input asp-for="Id" type="hidden" />
@@ -9,7 +14,9 @@
         </div>
         <div>
             <label>Body</label>
-            <input asp-for="Content" />
+            <div class="trumbowyg-dark">
+                <textarea id="editor" asp-for="Content"></textarea>
+            </div>
         </div>
         <div>
             <label>Desctiption</label>
@@ -17,8 +24,35 @@
         </div>
         <div>
             <label>Image</label>
+            <input asp-for="CurrentImage" type="hidden" />
             <input asp-for="CoverImagePath" />
         </div>
         <input type="submit" value="Submit" />
     </form>
 </div>
+
+@section scripts{
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/colors/trumbowyg.colors.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/pasteimage/trumbowyg.pasteimage.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/history/trumbowyg.history.min.js"></script>
+    <script>
+        $('#editor').trumbowyg({
+            btns: [
+                ['historyUndo','historyRedo'],
+                ['foreColor', 'backColor'],
+                ['fontsize'],
+                ['fontfamily'],
+                ['strong', 'em'],
+                ['justifyLeft', 'justifyCenter'],
+                ['insertImage', 'link'],
+            ],
+        });
+
+    </script>
+
+
+}

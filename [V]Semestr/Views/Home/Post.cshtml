@@ -9,6 +9,7 @@
 {
     var image_path = $"/Image/{Model.CoverImagePath}";
     <img src="@image_path" />
-
 }
-<p>@Model.Content</p>
+<div>
+    @Html.Raw(Model.Content);
+</div>
