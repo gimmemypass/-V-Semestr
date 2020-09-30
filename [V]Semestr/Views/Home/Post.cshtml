@@ -1,7 +1,9 @@
 ﻿@model Post
 
 @{ 
-
+    ViewBag.Title = Model.Title;
+    ViewBag.Describe = Model.Desciption;
+    ViewBag.Keywords = $"{Model.Tags?.Replace(","," ")} {Model.Category?.Name}";
 }
 <h2>@Model.Title</h2>
 
@@ -11,5 +13,5 @@
     <img src="@image_path" />
 }
 <div>
-    @Html.Raw(Model.Content);
+    @Html.Raw(Model.Content)
 </div>

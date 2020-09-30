@@ -1,4 +1,5 @@
 ﻿using _V_Semestr.Models;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -7,10 +8,10 @@ using System.Threading.Tasks;
 
 namespace _V_Semestr.Data.Repository
 {
-    public class Repository : IRepository
+    public class PostRepository : IPostRepository
     {
         private AppDbContext _ctx;
-        public Repository(AppDbContext ctx)
+        public PostRepository(AppDbContext ctx)
         {
             _ctx = ctx;
         }
@@ -27,7 +28,9 @@ namespace _V_Semestr.Data.Repository
 
         public Post GetPost(int id)
         {
-            return _ctx.Posts.FirstOrDefault(p => p.Id == id);
+            return _ctx.Posts
+                .Include(p => p.Category)
+                .FirstOrDefault(p => p.Id == id);
         }
 
         public void RemovePost(int id)
@@ -45,8 +48,15 @@ namespace _V_Semestr.Data.Repository
                 return true;
             }
             return false;
-        } 
+        }
 
+        public List<Post> GetAllPosts(string category)
+        {
+            Func<Post, bool> InCategory = (p) => { return p.Category.Name.ToLower().Equals(category.ToLower()); };
 
+            return _ctx.Posts
+                .Where(p => InCategory(p))
+                .ToList();
+        }
     }
 }

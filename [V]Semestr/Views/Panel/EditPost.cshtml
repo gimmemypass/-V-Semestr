@@ -6,21 +6,31 @@
 <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.min.css" rel="stylesheet" />
 <link href="~/lib/Trumbowyg-master/dist/plugins/colors/ui/trumbowyg.colors.min.css" rel="stylesheet" />
 <div>
-    <form asp-controller="Panel" asp-action="Edit" method="post" enctype="multipart/form-data">
+    <form asp-controller="Panel" asp-action="EditPost" method="post" enctype="multipart/form-data">
         <input asp-for="Id" type="hidden" />
         <div>
             <label>Title</label>
             <input asp-for="Title" />
         </div>
         <div>
+            <label>Description</label>
+            <input asp-for="Desciption" />
+        </div>
+        <div>
+            <label>Tags</label>
+            <input asp-for="Tags" />
+        </div>
+        <div>
+            <label>Category</label>
+            <select asp-for="CategoryId" asp-items=@Model.Categories >
+                <option disabled>--SELECT--</option> 
+            </select>
+        </div>
+        <div>
             <label>Body</label>
             <div class="trumbowyg-dark">
                 <textarea id="editor" asp-for="Content"></textarea>
             </div>
-        </div>
-        <div>
-            <label>Desctiption</label>
-            <input asp-for="Desciption" />
         </div>
         <div>
             <label>Image</label>

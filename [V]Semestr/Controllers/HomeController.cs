@@ -15,27 +15,27 @@ namespace _V_Semestr.Controllers
     public class HomeController : Controller
     {
         //private readonly ILogger<HomeController> _logger;
-        private IRepository _repo;
+        private IPostRepository _postRepo;
         private IFileManager _fileManager;
 
         public HomeController(
-            IRepository repo,
+            IPostRepository repo,
             IFileManager fileManager)
         {
-            _repo = repo;
+            _postRepo = repo;
             _fileManager = fileManager;
         }
 
         [Route("/")]
-        public IActionResult Index()
+        public IActionResult Index(string? category)
         {
-            var posts = _repo.GetAllPosts();
+            var posts = String.IsNullOrEmpty(category) ? _postRepo.GetAllPosts() : _postRepo.GetAllPosts(category);
             return View(posts);
         }
 
         public IActionResult Post(int id)
         {
-            var post = _repo.GetPost(id);
+            var post = _postRepo.GetPost(id);
             return View(post);
         }
 

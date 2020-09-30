@@ -49,7 +49,8 @@ namespace _V_Semestr
             //{
             //    option.AddPolicy("Admin", policy => policy.RequireClaim("Admin"));
             //});
-            services.AddTransient<IRepository, Repository>();
+            services.AddTransient<IPostRepository, PostRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddMvc(option => option.EnableEndpointRouting = false);
             

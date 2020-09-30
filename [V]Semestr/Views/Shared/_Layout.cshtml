@@ -5,12 +5,15 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title</title>
+    <meta name="description" content="@ViewBag.Description" />
+    <meta name="keywords" content="@ViewBag.Keywords" />
 </head>
 <body>
     <div>
         <a asp-controller="Test" asp-action="Index">Test</a>
         <a asp-controller="Home" asp-action="Index">Home</a>
-        <a asp-controller="Panel" asp-action="Edit">New Post</a>
+        <a asp-controller="Panel" asp-action="EditPost">New Post</a>
+        <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
         <a asp-controller="Panel" asp-action="Index">AdminPanel</a>
         @if (User.Identity.IsAuthenticated)
         {

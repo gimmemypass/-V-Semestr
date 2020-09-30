@@ -1,17 +1,33 @@
-﻿@model IEnumerable<Post>
+﻿@model PanelViewModel
 @{
 }
 <h2>Admin Panel</h2>
 <div>
+    <h3>Posts</h3>
     <ul>
-        @foreach(var post in Model)
+        @foreach(var post in Model.Posts)
         {
             <li>
                 @post.Title
-                <a asp-controller="Panel" asp-action="Edit" asp-route-id="@post.Id">
+                <a asp-controller="Panel" asp-action="EditPost" asp-route-id="@post.Id">
                     Edit
                 </a>
-                <a asp-controller="Panel" asp-action="Remove" asp-route-id="@post.Id">
+                <a asp-controller="Panel" asp-action="RemovePost" asp-route-id="@post.Id">
+                    Remove
+                </a>
+            </li>
+        }
+    </ul>
+    <h3>Category</h3>
+    <ul>
+        @foreach(var cat in Model.Categories)
+        {
+            <li>
+                @cat.Name
+                <a asp-controller="Panel" asp-action="EditCategory" asp-route-id="@cat.Id">
+                    Edit
+                </a>
+                <a asp-controller="Panel" asp-action="RemoveCategory" asp-route-id="@cat.Id">
                     Remove
                 </a>
             </li>

@@ -7,10 +7,11 @@ using _V_Semestr.Models;
 
 namespace _V_Semestr.Data.Repository
 {
-    public interface IRepository
+    public interface IPostRepository
     {
         Post GetPost(int id);
         List<Post> GetAllPosts();
+        List<Post> GetAllPosts(string category);
         void AddPost(Post post);
         void UpdatePost(Post post);
         void RemovePost(int id);
