@@ -26,6 +26,7 @@ namespace _V_Semestr.Controllers
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
             var result = await _signInManager.PasswordSignInAsync(vm.UserName, vm.Password, false, false);
+            Console.WriteLine("error"); 
             return RedirectToAction("Index", "Panel"); 
         }
 
