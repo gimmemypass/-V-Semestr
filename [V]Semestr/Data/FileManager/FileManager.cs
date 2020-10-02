@@ -58,8 +58,8 @@ namespace _V_Semestr.Data.FileManager
 
                 using (var fileStream = new FileStream(Path.Combine(save_path, fileName), FileMode.Create))
                 {
-                    await image.CopyToAsync(fileStream);
-                    //MagicImageProcessor.ProcessImage(image.OpenReadStream(), fileStream, ImageOptions());
+                    //await image.CopyToAsync(fileStream);
+                    MagicImageProcessor.ProcessImage(image.OpenReadStream(), fileStream, ImageOptions());
                 }
 
 
@@ -74,7 +74,7 @@ namespace _V_Semestr.Data.FileManager
 
         public ProcessImageSettings ImageOptions() => new ProcessImageSettings
         {
-            Width = 500,
+            Width = 800,
             Height = 500,
             ResizeMode = CropScaleMode.Crop,
             SaveFormat = FileFormat.Jpeg,

@@ -22,8 +22,8 @@
         </div>
         <div>
             <label>Category</label>
-            <select asp-for="CategoryId" asp-items=@Model.Categories >
-                <option disabled>--SELECT--</option> 
+            <select asp-for="CategoryId" asp-items=@Model.Categories>
+                <option disabled>--SELECT--</option>
             </select>
         </div>
         <div>
@@ -43,6 +43,11 @@
 
 @section scripts{
     <script src="//ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+    <script>window.jQuery || document.write('<script src="js/vendor/jquery-3.3.1.min.js"><\/script>')</script>
+    <!-- Import only if you use JQuery UI with Resizable interaction -->
+    <script src="//rawcdn.githack.com/trumbowyg/dist/plugins/resizimg/resizable-resolveconflict.min.js"></script>
+    <!-- Import dependency for Resizimg. For a production setup, follow install instructions here: https://github.com/RickStrahl/jquery-resizable -->
+    <script src="//rawcdn.githack.com/RickStrahl/jquery-resizable/master/dist/jquery-resizable.min.js"></script>
     <script src="~/lib/Trumbowyg-master/dist/trumbowyg.min.js"></script>
     <script src="~/lib/Trumbowyg-master/dist/plugins/colors/trumbowyg.colors.min.js"></script>
     <script src="~/lib/Trumbowyg-master/dist/plugins/fontsize/trumbowyg.fontsize.min.js"></script>
@@ -50,10 +55,11 @@
     <script src="~/lib/Trumbowyg-master/dist/plugins/fontfamily/trumbowyg.fontfamily.min.js"></script>
     <script src="~/lib/Trumbowyg-master/dist/plugins/history/trumbowyg.history.min.js"></script>
     <script src="~/lib/Trumbowyg-master/dist/plugins/base64/trumbowyg.base64.min.js"></script>
+    <script src="~/lib/Trumbowyg-master/dist/plugins/resizimg/trumbowyg.resizimg.min.js"></script>
     <script>
         $('#editor').trumbowyg({
             btns: [
-                ['historyUndo','historyRedo'],
+                ['historyUndo', 'historyRedo'],
                 ['foreColor', 'backColor'],
                 ['fontsize'],
                 ['fontfamily'],
@@ -62,6 +68,7 @@
                 ['insertImage', 'link'],
                 ['base64'],
             ],
+
         });
 
     </script>
