@@ -39,6 +39,8 @@ namespace _V_Semestr.Data.Repository
         }
         public void UpdatePost(Post post)
         {
+            int count = _ctx.ChangeTracker.Entries().Count();
+            System.Diagnostics.Debug.WriteLine($"{count}");
             _ctx.Posts.Update(post);
         }
         public async Task<bool> SaveChangesAsync()

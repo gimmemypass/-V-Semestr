@@ -12,5 +12,6 @@ namespace _V_Semestr.Data.FileManager
     {
         Task<string> SaveImage(IFormFile image);
         FileStream ImageStream(string image);
+        bool RemoveImage(string image);
     }
 }

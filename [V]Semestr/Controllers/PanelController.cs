@@ -85,7 +85,8 @@ namespace _V_Semestr.Controllers
                 Title = vm.Title,
                 Content = vm.Content,
                 Desciption = vm.Desciption,
-                Category = _catRepo.GetCategory(int.Parse(vm.CategoryId)),
+                //Category = _catRepo.GetCategory(int.Parse(vm.CategoryId)),
+                CategoryId = int.Parse(vm.CategoryId),
                 Tags = vm.Tags
             };
             if(vm.CoverImagePath == null)
@@ -94,10 +95,14 @@ namespace _V_Semestr.Controllers
             }
             else
             {
+                if (!string.IsNullOrEmpty(vm.CurrentImage))
+                    _fileManager.RemoveImage(vm.CurrentImage);
                 post.CoverImagePath = await _fileManager.SaveImage(vm.CoverImagePath); 
             }
             if (post.Id > 0)
+            {
                 _postRepo.UpdatePost(post);
+            }
             else
                 _postRepo.AddPost(post);
             if (await _postRepo.SaveChangesAsync())

@@ -29,9 +29,12 @@ namespace _V_Semestr.Data.Repository
 
         public Category GetCategory(int id)
         {
-            return _ctx.Categories
+            var cat = _ctx.Categories
                 .Include(c => c.Posts)
                 .FirstOrDefault(c => c.Id == id);
+            int count = _ctx.ChangeTracker.Entries().Count();
+            System.Diagnostics.Debug.WriteLine($"{count}");
+            return cat;
         }
 
         public void RemoveCategory(int id)

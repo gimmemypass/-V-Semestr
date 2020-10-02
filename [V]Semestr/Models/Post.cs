@@ -9,6 +9,7 @@ namespace _V_Semestr.Models
         public string Desciption { get; set; }
         public string Tags { get; set; }
         public string CoverImagePath { get; set; }
+        public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
         public DateTime PostedOn { get; set; }
 
