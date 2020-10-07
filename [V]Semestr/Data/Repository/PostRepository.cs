@@ -1,5 +1,6 @@
 ﻿using _V_Semestr.Models;
 using _V_Semestr.Models.Comments;
+using _V_Semestr.ViewModel;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -22,15 +23,20 @@ namespace _V_Semestr.Data.Repository
             _ctx.Posts.Add(post); 
         }
 
-        public List<Post> GetAllPosts(int pageNumber)
+        public IndexViewModel GetAllPosts(int pageNumber)
         {
             int pageSize = 5;
-            int pageCount = _ctx.Posts.Count() / pageSize;
+            int skip = pageSize * (pageNumber - 1);
+            return new IndexViewModel
+            {
+                NextPage =  _ctx.Posts.Count() > skip + pageSize,
+                Posts = _ctx.Posts
+                        .Skip(pageSize * (pageNumber - 1))
+                        .Take(pageSize)
+                        .ToList(),
+                PageNumber = pageNumber
+            };
 
-            return _ctx.Posts
-                .Skip(pageSize * (pageNumber - 1))
-                .Take(pageSize)
-                .ToList();
         }
         public List<Post> GetAllPosts()
         {
@@ -65,13 +71,27 @@ namespace _V_Semestr.Data.Repository
             return false;
         }
 
-        public List<Post> GetAllPosts(string category)
+        public IndexViewModel GetAllPosts(int pageNumber, string category)
         {
-            Func<Post, bool> InCategory = (p) => { return p.Category.Name.ToLower().Equals(category.ToLower()); };
-
-            return _ctx.Posts
-                .Where(p => InCategory(p))
-                .ToList();
+            int pageSize = 5;
+            int skip = pageSize * (pageNumber - 1);
+            var query = _ctx.Posts.Include(p => p.Category).AsQueryable();
+            var test = _ctx.Posts.Include(p => p.Category).AsQueryable().ToList();
+            if (!String.IsNullOrEmpty(category))
+            {
+                query = query.Where(p => p.Category.Name.ToLower().Equals(category.ToLower()));
+            }
+            var posts = query
+                        .Skip(pageSize * (pageNumber - 1))
+                        .Take(pageSize)
+                        .ToList();
+            return new IndexViewModel
+            {
+                NextPage =  query.Count() > skip + pageSize,
+                Posts = posts,
+                PageNumber = pageNumber,
+                Category = category
+            };
         }
 
         public void AddSubComment(SubComment comment)

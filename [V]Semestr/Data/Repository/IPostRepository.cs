@@ -5,6 +5,7 @@ using System.Text;
 using System.Threading.Tasks;
 using _V_Semestr.Models;
 using _V_Semestr.Models.Comments;
+using _V_Semestr.ViewModel;
 
 namespace _V_Semestr.Data.Repository
 {
@@ -12,8 +13,9 @@ namespace _V_Semestr.Data.Repository
     {
         Post GetPost(int id);
         List<Post> GetAllPosts();
-        List<Post> GetAllPosts(int pageNumber);
-        List<Post> GetAllPosts(string category);
+        //IndexViewModel GetAllPosts(int pageNumber);
+        IndexViewModel GetAllPosts(int pageNumber, string category);
+        //List<Post> GetAllPosts(string category);
         void AddPost(Post post);
         void UpdatePost(Post post);
         void RemovePost(int id);

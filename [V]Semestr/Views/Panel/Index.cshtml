@@ -30,6 +30,9 @@
                 <a asp-controller="Panel" asp-action="RemoveCategory" asp-route-id="@cat.Id">
                     Remove
                 </a>
+                <a asp-controller="Home" asp-action="Index" asp-route-category="@cat.Name">
+                    Show Posts
+                </a>
             </li>
         }
     </ul>

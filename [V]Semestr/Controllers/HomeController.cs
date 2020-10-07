@@ -34,10 +34,8 @@ namespace _V_Semestr.Controllers
         {
             if (pageNumber < 1)
                 return RedirectToAction("Index", new { pageNumber = 1, category });
-            var posts = String.IsNullOrEmpty(category) ?
-                _postRepo.GetAllPosts(pageNumber) :
-                _postRepo.GetAllPosts(category);
-            return View(posts);
+            var vm = _postRepo.GetAllPosts(pageNumber, category);
+            return View(vm);
         }
 
         public IActionResult Post(int id)
