@@ -9,6 +9,8 @@ using _V_Semestr.Models;
 using _V_Semestr.Data;
 using _V_Semestr.Data.Repository;
 using _V_Semestr.Data.FileManager;
+using _V_Semestr.Models.Comments;
+using _V_Semestr.ViewModel;
 
 namespace _V_Semestr.Controllers
 {
@@ -24,12 +26,17 @@ namespace _V_Semestr.Controllers
         {
             _postRepo = repo;
             _fileManager = fileManager;
+       //     var comment = new MainComment();
         }
 
         [Route("/")]
-        public IActionResult Index(string? category)
+        public IActionResult Index(int pageNumber, string? category)
         {
-            var posts = String.IsNullOrEmpty(category) ? _postRepo.GetAllPosts() : _postRepo.GetAllPosts(category);
+            if (pageNumber < 1)
+                return RedirectToAction("Index", new { pageNumber = 1, category });
+            var posts = String.IsNullOrEmpty(category) ?
+                _postRepo.GetAllPosts(pageNumber) :
+                _postRepo.GetAllPosts(category);
             return View(posts);
         }
 
@@ -40,26 +47,44 @@ namespace _V_Semestr.Controllers
         }
 
         [HttpGet("/Image/{image}")]
+        [ResponseCache(CacheProfileName = "Monthly")]
         public IActionResult Image(string image)
         {
             var mime = image.Substring(image.LastIndexOf('.') + 1);
             return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
         
-
-//        [HttpGet]
-        //public IActionResult NewCategory()
-        //{
-        //    return View(new Category());
-        //}
-        //[HttpPost]
-        //public async Task<IActionResult> NewCategory(Category category)
-        //{
-        //    _ctx.Categories.Add(category);
-        //    await _ctx.SaveChangesAsync();
-        //    return RedirectToAction("Index");
-        //}
-
+        [HttpPost]
+        public async Task<IActionResult> Comment(CommentViewModel vm)
+        {
+            if (!ModelState.IsValid)
+            {
+                return RedirectToAction("Post",new { id = vm.PostId });
+            }
+            var post = _postRepo.GetPost(vm.PostId);
+            if(vm.MainCommentId == 0)
+            {
+                post.MainComments = post.MainComments ?? new List<MainComment>();
+                post.MainComments.Add(new MainComment
+                {
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                });
+                _postRepo.UpdatePost(post);
+            }
+            else
+            {
+                var comment = new SubComment
+                {
+                    MainCommentId = vm.MainCommentId,
+                    Message = vm.Message,
+                    Created = DateTime.Now,
+                };
+                _postRepo.AddSubComment(comment); 
+            }
+            await _postRepo.SaveChangesAsync(); 
+            return RedirectToAction("Post",new { id = vm.PostId });
+        }
         public IActionResult Privacy()
         {
             return View();

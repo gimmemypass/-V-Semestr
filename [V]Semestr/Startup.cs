@@ -52,7 +52,10 @@ namespace _V_Semestr
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IFileManager, FileManager>();
-            services.AddMvc(option => option.EnableEndpointRouting = false);
+            services.AddMvc(option => {
+                option.EnableEndpointRouting = false;
+                option.CacheProfiles.Add("Monthly", new Microsoft.AspNetCore.Mvc.CacheProfile { Duration = 60 * 60 * 24 * 7 * 4 });
+            });
             
         }
 

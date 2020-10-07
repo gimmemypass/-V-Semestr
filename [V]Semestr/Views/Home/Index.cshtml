@@ -5,9 +5,11 @@
     ViewBag.Keywords = "blog programming games gamedev gamedesign unity";
     var base_path = Context.Request.PathBase;
 }
-    <img src="~/content/content/microsoft-xbox-elite-series-2-package.jpg" />
-<div>
-    <ul>
+@*<div class="main-img">
+    <span class="title">Time to make a Game</span>
+</div>*@
+<div class="container">
+    @*<ul>
         @foreach(var post in Model)
         {
             <li>
@@ -16,5 +18,17 @@
                 </a>
             </li>
         }
-    </ul>
+    </ul>*@
+    @foreach(var post in Model)
+    {
+        <a class="post" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
+            @if (!String.IsNullOrEmpty(post.CoverImagePath)) { 
+                var image_path = $"{base_path}/Image/{post.CoverImagePath}";
+                <img src="@image_path"/>
+            }
+            <span class="title">
+                @post.Title
+            </span>
+        </a>
+    }
 </div>

@@ -1,4 +1,6 @@
-﻿using System;
+﻿using _V_Semestr.Models.Comments;
+using System;
+using System.Collections.Generic;
 
 namespace _V_Semestr.Models
 {
@@ -11,6 +13,7 @@ namespace _V_Semestr.Models
         public string CoverImagePath { get; set; }
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
+        public virtual List<MainComment> MainComments { get; set; }
         public DateTime PostedOn { get; set; }
 
         //public int Views{get;set;} = 0;

@@ -1,4 +1,5 @@
 ﻿using _V_Semestr.Models;
+using _V_Semestr.Models.Comments;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -21,6 +22,16 @@ namespace _V_Semestr.Data.Repository
             _ctx.Posts.Add(post); 
         }
 
+        public List<Post> GetAllPosts(int pageNumber)
+        {
+            int pageSize = 5;
+            int pageCount = _ctx.Posts.Count() / pageSize;
+
+            return _ctx.Posts
+                .Skip(pageSize * (pageNumber - 1))
+                .Take(pageSize)
+                .ToList();
+        }
         public List<Post> GetAllPosts()
         {
             return _ctx.Posts.ToList();
@@ -30,6 +41,8 @@ namespace _V_Semestr.Data.Repository
         {
             return _ctx.Posts
                 .Include(p => p.Category)
+                .Include(p => p.MainComments)
+                    .ThenInclude(mc => mc.SubComments)
                 .FirstOrDefault(p => p.Id == id);
         }
 
@@ -59,6 +72,11 @@ namespace _V_Semestr.Data.Repository
             return _ctx.Posts
                 .Where(p => InCategory(p))
                 .ToList();
+        }
+
+        public void AddSubComment(SubComment comment)
+        {
+            _ctx.SubComments.Add(comment);
         }
     }
 }

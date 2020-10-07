@@ -3,10 +3,10 @@
 @{ 
     ViewBag.Title = Model.Title;
     ViewBag.Describe = Model.Desciption;
-    ViewBag.Keywords = $"{Model.Tags?.Replace(","," ")} {Model.Category?.Name}";
+    ViewBag.Keywords = $"{Model.Tags?.Replace(",", " ")} {Model.Category?.Name}";
     var base_path = Context.Request.PathBase;
 }
-<h2>@Model.Title</h2>
+@*<h2>@Model.Title</h2>
 
 @if (!String.IsNullOrEmpty(Model.CoverImagePath))
 {
@@ -15,4 +15,49 @@
 }
 <div>
     @Html.Raw(Model.Content)
+</div>*@
+<div class="container">
+        @if (!String.IsNullOrEmpty(Model.CoverImagePath))
+        {
+            <div class="post">
+                @{
+                    var image_path = $"{base_path}/Image/{Model.CoverImagePath}";
+                }
+                <img src="@image_path" />
+                <span class="title">@Model.Title</span>
+            </div>
+        }
+        else
+        {
+            <p class="title-without-img">@Model.Title</p>
+        }
+    <div class="post-body">
+        @Html.Raw(Model.Content)
+    </div>
+</div>
+<div class="comment-section">
+    <form method="post" asp-controller="Home" asp-action="Comment">
+        @{
+           await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
+        }
+        @foreach(var c in Model.MainComments)
+        {
+            <p>
+                @c.Message  [created on @c.Created]
+            </p>
+            <div style="margin-left: 30px;">
+                <h4>Sub Comments</h4>
+                @{
+                   await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
+                }
+                @foreach(var sc in c.SubComments)
+                {
+                    <p>
+                        @sc.Message  [created on @sc.Created]
+                    </p>
+                }
+            </div>
+        }
+    </form>
+
 </div>

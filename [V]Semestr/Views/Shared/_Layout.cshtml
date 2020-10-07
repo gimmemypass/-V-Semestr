@@ -5,33 +5,40 @@
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>@ViewBag.Title</title>
+
     <meta name="description" content="@ViewBag.Description" />
     <meta name="keywords" content="@ViewBag.Keywords" />
+
+    <environment include="Production" >
+        <link href="~/css/site.min.css" rel="stylesheet" />
+    </environment>
+    <environment include="Development" >
+        <link href="~/css/site.css" rel="stylesheet" />
+    </environment>
 </head>
 <body>
+    <div class="main-img">
+        <span class="title">Time to make a Game</span>
+    </div>
     <div>
-        <a asp-controller="Test" asp-action="Index">Test</a>
-        <a asp-controller="Home" asp-action="Index">Home</a>
-        <a asp-controller="Panel" asp-action="EditPost">New Post</a>
-        <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
-        <a asp-controller="Panel" asp-action="Index">AdminPanel</a>
-        @if (User.Identity.IsAuthenticated)
-        {
-            <ul >
-
-                <li>
+        <nav>
+            <a asp-controller="Test" asp-action="Index">Test</a>
+            <a asp-controller="Home" asp-action="Index">Home</a>
+            <a asp-controller="Panel" asp-action="EditPost">New Post</a>
+            <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
+            <a asp-controller="Panel" asp-action="Index">AdminPanel</a>
+            @if (User.Identity.IsAuthenticated)
+            {
+                <p style="color: white;">
                     @User.Identity.Name
-                </li>
-                <li>
-                    <a asp-controller="Auth" asp-action="Logout">Log out</a>
-                </li>
-            </ul>
-        }
-        else
-        {
-            <a asp-controller="Auth" asp-action="Login">Sign In</a>
-        }
-
+                </p>
+                <a asp-controller="Auth" asp-action="Logout">(Log out)</a>
+            }
+            else
+            {
+                <a asp-controller="Auth" asp-action="Login">Sign In</a>
+            }
+        </nav>
     </div>
     <div>
         @RenderBody()
