@@ -8,12 +8,12 @@
         @foreach(var post in Model.Posts)
         {
             <li>
-                @post.Title
+                <p>@post.Title</p> 
                 <a asp-controller="Panel" asp-action="EditPost" asp-route-id="@post.Id">
-                    Edit
+                    --Edit
                 </a>
                 <a asp-controller="Panel" asp-action="RemovePost" asp-route-id="@post.Id">
-                    Remove
+                    --Remove
                 </a>
             </li>
         }
@@ -23,15 +23,15 @@
         @foreach(var cat in Model.Categories)
         {
             <li>
-                @cat.Name
+                <p>@cat.Name</p>
                 <a asp-controller="Panel" asp-action="EditCategory" asp-route-id="@cat.Id">
-                    Edit
+                    --Edit
                 </a>
                 <a asp-controller="Panel" asp-action="RemoveCategory" asp-route-id="@cat.Id">
-                    Remove
+                    --Remove
                 </a>
                 <a asp-controller="Home" asp-action="Index" asp-route-category="@cat.Name">
-                    Show Posts
+                    --Show Posts
                 </a>
             </li>
         }

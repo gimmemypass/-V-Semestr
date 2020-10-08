@@ -89,3 +89,40 @@ nav p{
     margin: auto;
     color: white;
 }
+
+.pages{
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    margin: 2rem;
+}
+
+.pages a{
+    background-color: #1e1f24;
+    color: white;
+    padding: 1rem;
+    margin: 0.25rem;
+}
+
+.pages a.active{
+    background-color: #35363e;
+}
+
+.pages a:hover{
+   background-color: #292a33;
+   text-decoration:none;
+}
+
+.text{
+    color:white;
+}
+
+p{
+    color: white;
+    display:inline-block;
+}
+
+.h1, h2, h3, h4{
+    color:white;
+}
+

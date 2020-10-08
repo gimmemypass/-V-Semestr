@@ -85,9 +85,11 @@ namespace _V_Semestr.Data.Repository
                         .Skip(pageSize * (pageNumber - 1))
                         .Take(pageSize)
                         .ToList();
+            var postCount = query.Count();
             return new IndexViewModel
             {
-                NextPage =  query.Count() > skip + pageSize,
+                NextPage = postCount > skip + pageSize,
+                PageCount = (int) Math.Ceiling((double)postCount / pageSize), 
                 Posts = posts,
                 PageNumber = pageNumber,
                 Category = category

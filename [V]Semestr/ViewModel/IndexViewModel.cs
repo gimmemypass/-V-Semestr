@@ -11,6 +11,7 @@ namespace _V_Semestr.ViewModel
     {
         public IEnumerable<Post> Posts { get; set; }
         public bool NextPage { get; set; }
+        public int PageCount { get; set; }
         public int PageNumber { get; set; }
         public string Category { get; set; }
     }
