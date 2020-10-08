@@ -14,5 +14,6 @@ namespace _V_Semestr.ViewModel
         public int PageCount { get; set; }
         public int PageNumber { get; set; }
         public string Category { get; set; }
+        public IEnumerable<int> Pages { get; internal set; }
     }
 }

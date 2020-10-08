@@ -73,7 +73,7 @@ namespace _V_Semestr.Data.Repository
 
         public IndexViewModel GetAllPosts(int pageNumber, string category)
         {
-            int pageSize = 5;
+            int pageSize = 2;
             int skip = pageSize * (pageNumber - 1);
             var query = _ctx.Posts.Include(p => p.Category).AsQueryable();
             var test = _ctx.Posts.Include(p => p.Category).AsQueryable().ToList();
@@ -86,14 +86,49 @@ namespace _V_Semestr.Data.Repository
                         .Take(pageSize)
                         .ToList();
             var postCount = query.Count();
+            var pageCount = (int)Math.Ceiling((double)postCount / pageSize);
             return new IndexViewModel
             {
                 NextPage = postCount > skip + pageSize,
-                PageCount = (int) Math.Ceiling((double)postCount / pageSize), 
+                PageCount = pageCount,
                 Posts = posts,
+                Pages = GetPageNumbers(pageNumber, pageCount),
                 PageNumber = pageNumber,
                 Category = category
             };
+        }
+
+        private IEnumerable<int> GetPageNumbers(int pageNumber, int pageCount)
+        {
+            int midPoint = pageNumber < 3? 3
+                : pageNumber > pageCount - 2? pageCount - 2
+                : pageNumber;
+
+            int lowerBound = midPoint - 2;
+            int upperBound = midPoint + 2;
+
+            if(lowerBound != 1)
+            {
+                yield return 1;
+                if(lowerBound - 1 > 1)
+                {
+                    yield return -1;
+                }
+            }
+            for(int i = midPoint - 2; i <= midPoint + 2; i++)
+            {
+                yield return i;
+            }
+            if(upperBound != pageCount)
+            {
+
+                if(pageCount - upperBound > 1)
+                {
+                    yield return -1;
+                }
+                yield return pageCount;
+            }
+
         }
 
         public void AddSubComment(SubComment comment)
