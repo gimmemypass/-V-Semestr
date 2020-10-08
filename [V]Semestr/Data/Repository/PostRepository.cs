@@ -1,4 +1,5 @@
-﻿using _V_Semestr.Models;
+﻿using _V_Semestr.Helpers;
+using _V_Semestr.Models;
 using _V_Semestr.Models.Comments;
 using _V_Semestr.ViewModel;
 using Microsoft.EntityFrameworkCore;
@@ -92,54 +93,12 @@ namespace _V_Semestr.Data.Repository
                 NextPage = postCount > skip + pageSize,
                 PageCount = pageCount,
                 Posts = posts,
-                Pages = GetPageNumbers(pageNumber, pageCount),
+                Pages = PageHelper.GetPageNumbers(pageNumber, pageCount).ToList(),
                 PageNumber = pageNumber,
                 Category = category
             };
         }
 
-        private IEnumerable<int> GetPageNumbers(int pageNumber, int pageCount)
-        {
-            if (pageCount <= 5)
-            {
-                for (int i = 1; i <= pageCount; i++)
-                {
-                    yield return i;
-                }
-
-            }
-            else
-            {
-                int midPoint = pageNumber < 3 ? 3
-                    : pageNumber > pageCount - 2 ? pageCount - 2
-                    : pageNumber;
-
-                int lowerBound = midPoint - 2;
-                int upperBound = midPoint + 2;
-
-                if (lowerBound != 1)
-                {
-                    yield return 1;
-                    if (lowerBound - 1 > 1)
-                    {
-                        yield return -1;
-                    }
-                }
-                for (int i = lowerBound; i <= upperBound; i++)
-                {
-                    yield return i;
-                }
-                if (upperBound != pageCount)
-                {
-
-                    if (pageCount - upperBound > 1)
-                    {
-                        yield return -1;
-                    }
-                    yield return pageCount;
-                }
-            }
-        }
 
         public void AddSubComment(SubComment comment)
         {

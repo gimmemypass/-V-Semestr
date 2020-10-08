@@ -35,29 +35,40 @@
         @Html.Raw(Model.Content)
     </div>
 </div>
-<div class="comment-section">
-    <form method="post" asp-controller="Home" asp-action="Comment">
-        @{
-           await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
-        }
-        @foreach(var c in Model.MainComments)
-        {
-            <p>
-                @c.Message  [created on @c.Created]
-            </p>
-            <div style="margin-left: 30px;">
-                <h4>Sub Comments</h4>
-                @{
-                   await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
-                }
-                @foreach(var sc in c.SubComments)
-                {
-                    <p>
-                        @sc.Message  [created on @sc.Created]
-                    </p>
-                }
-            </div>
-        }
-    </form>
 
-</div>
+@if (User.Identity.IsAuthenticated)
+{
+    <div class="comment-section">
+        <form method="post" asp-controller="Home" asp-action="Comment">
+            @{
+                await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0 });
+            }
+            @foreach (var c in Model.MainComments)
+            {
+                <p>
+                    @c.Message  [created on @c.Created]
+                </p>
+                <div style="margin-left: 30px;">
+                    <h4>Sub Comments</h4>
+                    @{
+                        await Html.RenderPartialAsync("_MainComment", new CommentViewModel { PostId = Model.Id, MainCommentId = c.Id });
+                    }
+                    @foreach (var sc in c.SubComments)
+                    {
+                        <p>
+                            @sc.Message  [created on @sc.Created]
+                        </p>
+                    }
+                </div>
+                        }
+        </form>
+
+    </div>
+}
+else
+{
+                            //todo
+    <div >
+        <a asp-action="Login" asp-controller="Auth">Sign In to comment</a>
+    </div>
+}
