@@ -30,11 +30,11 @@ namespace _V_Semestr.Controllers
         }
 
         [Route("/")]
-        public IActionResult Index(int pageNumber, string? category)
+        public IActionResult Index(int pageNumber, string category, string search)
         {
             if (pageNumber < 1)
                 return RedirectToAction("Index", new { pageNumber = 1, category });
-            var vm = _postRepo.GetAllPosts(pageNumber, category);
+            var vm = _postRepo.GetAllPosts(pageNumber, category, search);
             return View(vm);
         }
 

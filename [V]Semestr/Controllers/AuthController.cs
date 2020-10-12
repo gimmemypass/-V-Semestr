@@ -1,4 +1,5 @@
-﻿using _V_Semestr.ViewModel;
+﻿using _V_Semestr.Services.Email;
+using _V_Semestr.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
@@ -13,13 +14,16 @@ namespace _V_Semestr.Controllers
     {
         private SignInManager<IdentityUser> _signInManager;
         private UserManager<IdentityUser> _userManager;
+        private IEmailService _emailService;
 
         public AuthController(
            SignInManager<IdentityUser> signInManager,
-           UserManager<IdentityUser> userManager)
+           UserManager<IdentityUser> userManager,
+           IEmailService emailService)
         {
             _signInManager = signInManager;
             _userManager = userManager;
+            _emailService = emailService;
         } 
         [HttpGet]
         public IActionResult Login()
@@ -74,6 +78,7 @@ namespace _V_Semestr.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
+                //await _emailService.SendEmail(user.Email, "Welcom", "Thank you for registering!");
                 return RedirectToAction("Index", "Home");
             }
             return View(vm);

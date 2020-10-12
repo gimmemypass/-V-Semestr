@@ -72,15 +72,25 @@ namespace _V_Semestr.Data.Repository
             return false;
         }
 
-        public IndexViewModel GetAllPosts(int pageNumber, string category)
+        public IndexViewModel GetAllPosts(int pageNumber, string category, string search)
         {
             int pageSize = 2;
             int skip = pageSize * (pageNumber - 1);
-            var query = _ctx.Posts.Include(p => p.Category).AsQueryable();
-            var test = _ctx.Posts.Include(p => p.Category).AsQueryable().ToList();
+            var query = _ctx.Posts.Include(p => p.Category).AsNoTracking().AsQueryable();
             if (!String.IsNullOrEmpty(category))
             {
                 query = query.Where(p => p.Category.Name.ToLower().Equals(category.ToLower()));
+            }
+            if (!String.IsNullOrEmpty(search))
+            {
+                query = query.Where(x => EF.Functions.Like(x.Title, $"%{search}%")
+                                        || EF.Functions.Like(x.Content, $"%{search}%")
+                                        || EF.Functions.Like(x.Desciption, $"%{search}%")
+                                        || EF.Functions.Like(x.Tags, $"%{search}%"));
+                query = query.Where(x => x.Title.Contains(search) 
+                                       || x.Content.Contains(search)
+                                       || x.Desciption.Contains(search)
+                                       || x.Tags.Contains(search));
             }
             var posts = query
                         .Skip(pageSize * (pageNumber - 1))
@@ -95,7 +105,8 @@ namespace _V_Semestr.Data.Repository
                 Posts = posts,
                 Pages = PageHelper.GetPageNumbers(pageNumber, pageCount).ToList(),
                 PageNumber = pageNumber,
-                Category = category
+                Category = category,
+                Search = search,
             };
         }
 

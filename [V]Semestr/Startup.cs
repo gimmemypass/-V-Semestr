@@ -15,6 +15,8 @@ using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.AspNetCore.Identity.UI;
 using Microsoft.AspNetCore.Identity;
 using _V_Semestr.Data.FileManager;
+using _V_Semestr.Configuration;
+using _V_Semestr.Services.Email;
 
 namespace _V_Semestr
 {
@@ -28,9 +30,10 @@ namespace _V_Semestr
 
         public IConfiguration Configuration { get; }
 
-        // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
+            services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
+
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
             services.AddIdentity<IdentityUser, IdentityRole>(options =>
             {
@@ -52,6 +55,8 @@ namespace _V_Semestr
             services.AddTransient<IPostRepository, PostRepository>();
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IFileManager, FileManager>();
+            services.AddSingleton<IEmailService, EmailService>();
+
             services.AddMvc(option => {
                 option.EnableEndpointRouting = false;
                 option.CacheProfiles.Add("Monthly", new Microsoft.AspNetCore.Mvc.CacheProfile { Duration = 60 * 60 * 24 * 7 * 4 });

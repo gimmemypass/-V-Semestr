@@ -14,7 +14,7 @@ namespace _V_Semestr.Data.Repository
         Post GetPost(int id);
         List<Post> GetAllPosts();
         //IndexViewModel GetAllPosts(int pageNumber);
-        IndexViewModel GetAllPosts(int pageNumber, string category);
+        IndexViewModel GetAllPosts(int pageNumber, string category, string search);
         //List<Post> GetAllPosts(string category);
         void AddPost(Post post);
         void UpdatePost(Post post);

@@ -18,10 +18,27 @@
 </head>
 <body>
     <div class="main-img">
-        <span class="title">Time to make a Game</span>
+        <span class="blog-title">Time to make a Game</span>
+        <form asp-action="Index" asp-controller="Home" method="get">
+            @if (!Model.GetType().Name.Equals("IndexViewModel"))
+            {
+                <input type="hidden" name="pageNumber" value="1" />
+                <input type="hidden" name="category" value="" />
+                <input class="search" type="text" placeholder="Search Blog" name="search" value="" />
+            }
+            else
+            {
+                <input type="hidden" name="pageNumber" value="@Model.PageNumber" />
+                <input type="hidden" name="category" value="@Model.Category" />
+                <input class="search" type="text" placeholder="Search Blog" name="search" value="@Model.Search" />
+            }
+        </form>
     </div>
     <div>
         <nav>
+            @{
+                (Model.GetType().Name != "IndexViewModel").ToString();
+            }
             <a asp-controller="Test" asp-action="Index">Test</a>
             <a asp-controller="Home" asp-action="Index">Home</a>
             <a asp-controller="Panel" asp-action="EditPost">New Post</a>
