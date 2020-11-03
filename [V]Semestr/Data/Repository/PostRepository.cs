@@ -61,6 +61,7 @@ namespace _V_Semestr.Data.Repository
         {
             int count = _ctx.ChangeTracker.Entries().Count();
             System.Diagnostics.Debug.WriteLine($"{count}");
+            post.Updated = DateTime.Now;
             _ctx.Posts.Update(post);
         }
         public async Task<bool> SaveChangesAsync()
@@ -74,6 +75,7 @@ namespace _V_Semestr.Data.Repository
 
         public IndexViewModel GetAllPosts(int pageNumber, string category, string search)
         {
+            if (pageNumber < 1) pageNumber = 1;
             int pageSize = 2;
             int skip = pageSize * (pageNumber - 1);
             var query = _ctx.Posts.Include(p => p.Category).AsNoTracking().AsQueryable();
@@ -87,17 +89,18 @@ namespace _V_Semestr.Data.Repository
                                         || EF.Functions.Like(x.Content, $"%{search}%")
                                         || EF.Functions.Like(x.Desciption, $"%{search}%")
                                         || EF.Functions.Like(x.Tags, $"%{search}%"));
-                query = query.Where(x => x.Title.Contains(search) 
-                                       || x.Content.Contains(search)
-                                       || x.Desciption.Contains(search)
-                                       || x.Tags.Contains(search));
+                //query = query.Where(x => x.Title.Contains(search) 
+                //                       || x.Content.Contains(search)
+                //                       || x.Desciption.Contains(search)
+                //                       || x.Tags.Contains(search));
             }
+            var postCount = query.Count();
+            var pageCount = (int)Math.Ceiling((double)postCount / pageSize);
+            if (pageNumber > pageCount) pageNumber = pageCount;
             var posts = query
                         .Skip(pageSize * (pageNumber - 1))
                         .Take(pageSize)
                         .ToList();
-            var postCount = query.Count();
-            var pageCount = (int)Math.Ceiling((double)postCount / pageSize);
             return new IndexViewModel
             {
                 NextPage = postCount > skip + pageSize,

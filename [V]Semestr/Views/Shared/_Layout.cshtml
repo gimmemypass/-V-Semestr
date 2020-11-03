@@ -15,10 +15,13 @@
     <environment include="Development" >
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
+
 </head>
 <body>
     <div class="main-img">
         <span class="blog-title">Time to make a Game</span>
+
+
         <form asp-action="Index" asp-controller="Home" method="get">
             @if (!Model.GetType().Name.Equals("IndexViewModel"))
             {
@@ -33,6 +36,9 @@
                 <input class="search" type="text" placeholder="Search Blog" name="search" value="@Model.Search" />
             }
         </form>
+    </div>
+    <div>
+        <MailTo class="contact-me" mail-to="dgolovenko01@gmail.com">Contact me</MailTo>
     </div>
     <div>
         <nav>

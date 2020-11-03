@@ -5,20 +5,7 @@
     ViewBag.Keywords = "blog programming games gamedev gamedesign unity";
     var base_path = Context.Request.PathBase;
 }
-@*<div class="main-img">
-    <span class="title">Time to make a Game</span>
-</div>*@
 <div class="container">
-    @*<ul>
-        @foreach(var post in Model)
-        {
-            <li>
-                <a asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
-                    @post.Title
-                </a>
-            </li>
-        }
-    </ul>*@
     @foreach(var post in Model.Posts)
     {
         <a class="post" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
@@ -31,5 +18,5 @@
             </span>
         </a>
     }
-    <partial name="_BlogPagination" model="Model"/>
+    @await Component.InvokeAsync("Paginator", Model);
 </div>

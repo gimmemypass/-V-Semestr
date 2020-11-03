@@ -5,24 +5,24 @@
 }
 <link href="~/lib/Trumbowyg-master/dist/ui/trumbowyg.min.css" rel="stylesheet" />
 <link href="~/lib/Trumbowyg-master/dist/plugins/colors/ui/trumbowyg.colors.min.css" rel="stylesheet" />
-<div>
+<div class="field-wrapper">
     <form asp-controller="Panel" asp-action="EditPost" method="post" enctype="multipart/form-data">
         <input asp-for="Id" type="hidden" />
         <div>
             <label class="text">Title</label>
-            <input asp-for="Title" />
+            <input class="field-form" asp-for="Title" />
         </div>
         <div>
             <label class="text">Description</label>
-            <input asp-for="Desciption" />
+            <input class="field-form" asp-for="Desciption" />
         </div>
         <div>
             <label class="text">Tags</label>
-            <input asp-for="Tags" />
+            <input class="field-form" asp-for="Tags" />
         </div>
         <div>
             <label class="text">Category</label>
-            <select asp-for="CategoryId" asp-items=@Model.Categories>
+            <select class="field-form" asp-for="CategoryId" asp-items=@Model.Categories>
                 <option disabled>--SELECT--</option>
             </select>
         </div>
@@ -35,7 +35,7 @@
         <div>
             <label class="text">Image</label>
             <input asp-for="CurrentImage" type="hidden" />
-            <input asp-for="CoverImagePath" />
+            <input class="field-form" asp-for="CoverImagePath" />
         </div>
         <input type="submit" value="Submit" />
     </form>
