@@ -13,7 +13,7 @@ namespace _V_Semestr.Models
         public string CoverImagePath { get; set; }
         public int CategoryId { get; set; }
         public virtual Category Category { get; set; }
-        public virtual List<MainComment> MainComments { get; set; }
+        public virtual List<Comment> Comments { get; set; }
         public DateTime PostedOn { get; set; }
 
         //public int Views{get;set;} = 0;

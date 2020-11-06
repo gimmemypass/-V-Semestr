@@ -24,21 +24,21 @@ namespace _V_Semestr.Data.Repository
             _ctx.Posts.Add(post); 
         }
 
-        public IndexViewModel GetAllPosts(int pageNumber)
-        {
-            int pageSize = 5;
-            int skip = pageSize * (pageNumber - 1);
-            return new IndexViewModel
-            {
-                NextPage =  _ctx.Posts.Count() > skip + pageSize,
-                Posts = _ctx.Posts
-                        .Skip(pageSize * (pageNumber - 1))
-                        .Take(pageSize)
-                        .ToList(),
-                PageNumber = pageNumber
-            };
+        //public IndexViewModel GetAllPosts(int pageNumber)
+        //{
+        //    int pageSize = 5;
+        //    int skip = pageSize * (pageNumber - 1);
+        //    return new IndexViewModel
+        //    {
+        //        NextPage =  _ctx.Posts.Count() > skip + pageSize,
+        //        Posts = _ctx.Posts
+        //                .Skip(pageSize * (pageNumber - 1))
+        //                .Take(pageSize)
+        //                .ToList(),
+        //        PageNumber = pageNumber
+        //    };
 
-        }
+        //}
         public List<Post> GetAllPosts()
         {
             return _ctx.Posts.ToList();
@@ -48,8 +48,8 @@ namespace _V_Semestr.Data.Repository
         {
             return _ctx.Posts
                 .Include(p => p.Category)
-                .Include(p => p.MainComments)
-                    .ThenInclude(mc => mc.SubComments)
+                .Include(p => p.Comments)
+                    //.ThenInclude(mc => mc.SubComments)
                 .FirstOrDefault(p => p.Id == id);
         }
 
@@ -78,7 +78,11 @@ namespace _V_Semestr.Data.Repository
             if (pageNumber < 1) pageNumber = 1;
             int pageSize = 2;
             int skip = pageSize * (pageNumber - 1);
-            var query = _ctx.Posts.Include(p => p.Category).AsNoTracking().AsQueryable();
+            var query = _ctx.Posts
+                .Include(p => p.Category)
+                .Where(p => p.Shown)
+                .AsNoTracking()
+                .AsQueryable();
             if (!String.IsNullOrEmpty(category))
             {
                 query = query.Where(p => p.Category.Name.ToLower().Equals(category.ToLower()));
@@ -114,9 +118,17 @@ namespace _V_Semestr.Data.Repository
         }
 
 
-        public void AddSubComment(SubComment comment)
+        public void AddComment(Comment comment)
         {
-            _ctx.SubComments.Add(comment);
+            _ctx.Comments.Add(comment);
+        }
+
+        public List<Comment> GetCommentsByPostId(int postId)
+        {
+            return _ctx.Comments
+                    .Where(c => c.PostId == postId)
+                    .AsNoTracking()
+                    .ToList();
         }
     }
 }

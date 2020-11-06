@@ -6,6 +6,10 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <Content Remove="Views\Home\_Comment.cshtml" />
+  </ItemGroup>
+
+  <ItemGroup>
     <_ContentIncludedByDefault Remove="bundleconfig.json" />
   </ItemGroup>
 
@@ -33,6 +37,7 @@
 
   <ItemGroup>
     <None Include="..\.editorconfig" Link=".editorconfig" />
+    <None Include="Views\Shared\_Comment.cshtml" />
     <None Include="wwwroot\lib\Trumbowyg-master\.github\FUNDING.yml" />
     <None Include="wwwroot\lib\Trumbowyg-master\.github\ISSUE_TEMPLATE.md" />
   </ItemGroup>

@@ -20,6 +20,22 @@ namespace _V_Semestr.Components
 
         public IViewComponentResult Invoke(CommentViewModel vm)
         {
+            var comments = _postRepo.GetCommentsByPostId(vm.PostId);
+            foreach(var c in comments)
+            {
+                if(c.ParentCommentId == vm.Id)
+                {
+                    vm.Children.Add(new CommentViewModel
+                    {
+                        Id = c.Id,
+                        PostId = c.PostId,
+                        ParentCommentId = c.ParentCommentId,
+                        Message = c.Message,
+                        Username = c.Username,
+                        Created = c.Created
+                    });
+                }
+            }
             var view = View("Default", vm);
             return view;
         }

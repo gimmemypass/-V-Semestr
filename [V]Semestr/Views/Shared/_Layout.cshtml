@@ -4,15 +4,18 @@
 <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700">
+    <script src="~/lib/bootstrap/js/bootstrap.js"></script>
+    <script src="~/lib/jquery/jquery.js"></script>
     <title>@ViewBag.Title</title>
-
     <meta name="description" content="@ViewBag.Description" />
     <meta name="keywords" content="@ViewBag.Keywords" />
-
-    <environment include="Production" >
+    <link href="~/fonts/font-awesome.min.css" rel="stylesheet" />
+    <environment include="Production">
         <link href="~/css/site.min.css" rel="stylesheet" />
     </environment>
-    <environment include="Development" >
+    <environment include="Development">
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
 
@@ -41,31 +44,61 @@
         <MailTo class="contact-me" mail-to="dgolovenko01@gmail.com">Contact me</MailTo>
     </div>
     <div>
-        <nav>
-            @{
+        <nav class="navbar navbar-light navbar-expand-md sticky-top navigation-clean-button" style="height: 80px;color: #ffffff;background: #1a1b1d;">
+            <div class="container-fluid">
+                <div class="collapse navbar-collapse" id="navcol-1">
+                    <ul class="nav navbar-nav mx-auto">
+                        <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Home" asp-action="Index"><i class="fa fa-home"></i>&nbsp;Home</a></li>
+                        <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="EditPost"><i class="fa fa-wpexplorer"></i>&nbsp;New Post</a></li>
+                        <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="EditCategory"><i class="fa fa-star-o"></i>&nbsp;New Category</a></li>
+                        @if (User.IsInRole("Admin"))
+                         {
+                            <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="Index"><i class="fa fa-star-o"></i>&nbsp;Admin Panel</a></li>
+                         }
+                        
+                        @if (User.Identity.IsAuthenticated)
+                         {
+                            <li class="nav-item"><p class="nav-link" style="color: white;">
+                                (@User.Identity.Name)
+                           </p></li>
+                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Logout" ><i class="fa fa-sign-in"></i>&nbsp;Log Out</a></li>
+                        }
+                        else
+                        {
+
+                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Login" ><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
+                        }
+                    </ul>
+                </div>
+            </div>
+        </nav>
+    </div>
+    @*@<div>
+            <nav>
+                @{
                 (Model.GetType().Name != "IndexViewModel").ToString();
-            }
-            <a asp-controller="Test" asp-action="Index">Test</a>
-            <a asp-controller="Home" asp-action="Index">Home</a>
-            <a asp-controller="Panel" asp-action="EditPost">New Post</a>
-            <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
-            @if (User.Identity.IsAuthenticated)
-            {
+                }
+                <a asp-controller="Test" asp-action="Index">Test</a>
+                <a asp-controller="Home" asp-action="Index">Home</a>
+                <a asp-controller="Panel" asp-action="EditPost">New Post</a>
+                <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
+                @if (User.Identity.IsAuthenticated)
+                {
                 <p style="color: white;">
                     @User.Identity.Name
                 </p>
                 @if (User.IsInRole("Admin"))
                 {
-                    <a asp-controller="Panel" asp-action="Index">Admin Panel</a>
+                <a asp-controller="Panel" asp-action="Index">Admin Panel</a>
                 }
                 <a asp-controller="Auth" asp-action="Logout">(Log out)</a>
-            }
-            else
-            {
+                }
+                else
+                {
                 <a asp-controller="Auth" asp-action="Login">Sign In</a>
-            }
-        </nav>
-    </div>
+                }
+            </nav>
+        </div>*@
     <div>
         @RenderBody()
     </div>

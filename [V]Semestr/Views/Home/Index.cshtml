@@ -8,7 +8,7 @@
 <div class="container">
     @foreach(var post in Model.Posts)
     {
-        <a class="post" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
+        <a class="post-cover-image" asp-controller="Home" asp-action="Post" asp-route-id="@post.Id">
             @if (!String.IsNullOrEmpty(post.CoverImagePath)) { 
                 var image_path = $"{base_path}/Image/{post.CoverImagePath}";
                 <img src="@image_path"/>

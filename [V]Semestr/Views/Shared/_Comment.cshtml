@@ -1,0 +1,14 @@
+﻿@model CommentViewModel
+
+@{
+
+}
+
+<form method="post" asp-controller="Home" asp-action="Comment">
+    <input asp-for="Id" type="hidden"/>
+    <input asp-for="PostId" type="hidden" />
+    <input asp-for="ParentCommentId" type="hidden", value=@Model.Id />
+    <input class="field-form" asp-for="Message" value=""  />
+    <button type="submit">Send</button>
+</form>
+

@@ -11,30 +11,35 @@ using _V_Semestr.Data.Repository;
 using _V_Semestr.Data.FileManager;
 using _V_Semestr.Models.Comments;
 using _V_Semestr.ViewModel;
+using System.Security.Claims;
+using _V_Semestr.Models.Identity;
+using Microsoft.AspNetCore.Identity;
 
 namespace _V_Semestr.Controllers
 {
     public class HomeController : Controller
     {
-        //private readonly ILogger<HomeController> _logger;
         private IPostRepository _postRepo;
         private IFileManager _fileManager;
+        private readonly UserManager<IdentityUser> _userManager;
 
         public HomeController(
             IPostRepository repo,
-            IFileManager fileManager)
+            IFileManager fileManager,
+            UserManager<IdentityUser> userManager)
         {
             _postRepo = repo;
             _fileManager = fileManager;
-       //     var comment = new MainComment();
+            _userManager = userManager;
         }
+
+        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [Route("/")]
         public IActionResult Index(int pageNumber, string category, string search)
         {
-            //if (pageNumber < 1)
-            //    return RedirectToAction("Index", new { pageNumber = 1, category, search });
             var vm = _postRepo.GetAllPosts(pageNumber, category, search);
+            vm.Posts = vm.Posts.Where(p => p.Shown);
             return View(vm);
         }
 
@@ -51,37 +56,33 @@ namespace _V_Semestr.Controllers
             var mime = image.Substring(image.LastIndexOf('.') + 1);
             return new FileStreamResult(_fileManager.ImageStream(image), $"image/{mime}");
         }
-        
         [HttpPost]
         public async Task<IActionResult> Comment(CommentViewModel vm)
         {
+            var user = await GetCurrentUserAsync();
+            vm.Username = user.UserName;
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Post",new { id = vm.PostId });
+                return RedirectToAction("Post", new { id = vm.PostId });
             }
-            var post = _postRepo.GetPost(vm.PostId);
-            if(vm.MainCommentId == 0)
+            var comment = new Comment
             {
-                post.MainComments = post.MainComments ?? new List<MainComment>();
-                post.MainComments.Add(new MainComment
-                {
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                });
-                _postRepo.UpdatePost(post);
-            }
-            else
-            {
-                var comment = new SubComment
-                {
-                    MainCommentId = vm.MainCommentId,
-                    Message = vm.Message,
-                    Created = DateTime.Now,
-                };
-                _postRepo.AddSubComment(comment); 
-            }
-            await _postRepo.SaveChangesAsync(); 
-            return RedirectToAction("Post",new { id = vm.PostId });
+                Message = vm.Message,
+                Created = DateTime.Now,
+                Updated = DateTime.Now,
+                ParentCommentId = vm.ParentCommentId,
+                Username = vm.Username,
+                PostId = vm.PostId,
+                Shown = false,
+            };
+            //var post = _postRepo.GetPost(vm.PostId);
+            //post.Comments = post.Comments ?? new List<Comment>();
+            //post.Comments.Add(comment);
+            //_postRepo.UpdatePost(post);
+            _postRepo.AddComment(comment);
+            await _postRepo.SaveChangesAsync();
+            return RedirectToAction("Post", new { id = vm.PostId });
+
         }
         public IActionResult Privacy()
         {

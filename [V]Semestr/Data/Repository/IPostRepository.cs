@@ -19,7 +19,8 @@ namespace _V_Semestr.Data.Repository
         void AddPost(Post post);
         void UpdatePost(Post post);
         void RemovePost(int id);
-        void AddSubComment(SubComment comment);
+        void AddComment(Comment comment);
+        List<Comment> GetCommentsByPostId(int postId);
 
         Task<bool> SaveChangesAsync();
     }

@@ -87,17 +87,18 @@ nav p{
 }
 
 .container{
-    max-width:800px;
+    max-width:1000px;
     width: 100%;
     margin: auto;
 }
 
-.post{
+.post-cover-image{
     margin: 10px;
     position: relative;
-    display: flex;
+    display:flex;
     height: 400px;
     box-shadow: 0 0 25px 0 black;
+    max-width: 800px;
 }
 
 .post img{
@@ -224,3 +225,18 @@ p{
     left: 90%;
 }
 
+ul, li{
+    list-style: none;
+}
+
+ul.simple-nested li{
+   margin-left: 3em; 
+}
+
+.card-inner {
+    margin-left: 1rem;
+}
+
+.card{
+    background-color: #121212;
+}

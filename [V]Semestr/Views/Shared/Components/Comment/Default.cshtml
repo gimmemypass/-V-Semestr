@@ -1,11 +1,41 @@
 ﻿@model CommentViewModel
+<script>
+    function showReplyForm(id) {
 
-<div>
-    <form method="post" asp-controller="Home" asp-action="Comment">
-        <input asp-for="PostId" type="hidden" />
-        <input asp-for="MainCommentId" type="hidden" />
-        <input class="field-form" asp-for="Message" />
-        <button type="submit">Send</button>
-
-    </form>
+        var x = document.getElementById(`replyForm_${id}`);
+        if (x.style.display === "none") {
+            x.style.display = "block";
+        }
+        else {
+            x.style.display = "none";
+        }
+    }
+</script>
+ <div class="card card-inner">
+    <div class="card-body">
+        <div class="row">
+            <div class="col-md-2">
+                <p><strong>@Model.Username</strong></a></p>
+                <p class="text-secondary text-center">@Model.Created</p>
+            </div>
+            <div class="col-md-10">
+                <p>@Model.Message</p>
+                <p>
+                    <a class="float-right btn btn-outline-primary ml-2" onclick="showReplyForm(@Model.Id)">  <i class="fa fa-reply"></i> Reply</a>
+                    <a class="float-right btn text-white btn-danger"> <i class="fa fa-heart"></i> Like</a>
+                </p>
+                <form id="replyForm_@Model.Id" method="post" style="display: none" asp-controller="Home" asp-action="Comment">
+                    <input asp-for="PostId" type="hidden" />
+                    <input asp-for="ParentCommentId" type="hidden", value=@Model.Id />
+                    <input class="field-form" asp-for="Message" value=""  />
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+        @foreach(var c in Model.Children)
+        {
+            @await Component.InvokeAsync("Comment", new CommentViewModel { PostId=Model.PostId, Id = c.Id, Created = c.Created, Message = c.Message, ParentCommentId = c.ParentCommentId, Username = c.Username })
+        }
+    </div>
 </div>
+

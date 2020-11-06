@@ -104,7 +104,9 @@ namespace _V_Semestr.Controllers
                 _postRepo.UpdatePost(post);
             }
             else
+            {
                 _postRepo.AddPost(post);
+            }
             if (await _postRepo.SaveChangesAsync())
                 return RedirectToAction("Index");
             else return View(post);
@@ -155,6 +157,16 @@ namespace _V_Semestr.Controllers
         {
             _catRepo.RemoveCategory(id);
             await _catRepo.SaveChangesAsync();
+            return RedirectToAction("Index");
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> ChangeShowingPost(int id)
+        {
+            var post = _postRepo.GetPost(id);
+            post.Shown = !post.Shown;
+            _postRepo.UpdatePost(post);
+            await _postRepo.SaveChangesAsync();
             return RedirectToAction("Index");
         }
 

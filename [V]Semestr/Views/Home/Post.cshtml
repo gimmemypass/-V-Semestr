@@ -1,6 +1,6 @@
 ﻿@model Post
 
-@{ 
+@{
     ViewBag.Title = Model.Title;
     ViewBag.Describe = Model.Desciption;
     ViewBag.Keywords = $"{Model.Tags?.Replace(",", " ")} {Model.Category?.Name}";
@@ -8,29 +8,29 @@
 }
 @*<h2>@Model.Title</h2>
 
-@if (!String.IsNullOrEmpty(Model.CoverImagePath))
-{
-    var image_path = $"{base_path}/Image/{Model.CoverImagePath}";
-    <img src="@image_path" />
-}
-<div>
-    @Html.Raw(Model.Content)
-</div>*@
+    @if (!String.IsNullOrEmpty(Model.CoverImagePath))
+    {
+        var image_path = $"{base_path}/Image/{Model.CoverImagePath}";
+        <img src="@image_path" />
+    }
+    <div>
+        @Html.Raw(Model.Content)
+    </div>*@
 <div class="container">
-        @if (!String.IsNullOrEmpty(Model.CoverImagePath))
-        {
-            <div class="post">
-                @{
-                    var image_path = $"{base_path}/Image/{Model.CoverImagePath}";
-                }
-                <img src="@image_path" />
-                <span class="title">@Model.Title</span>
-            </div>
-        }
-        else
-        {
-            <p class="title-without-img">@Model.Title</p>
-        }
+    @if (!String.IsNullOrEmpty(Model.CoverImagePath))
+    {
+        <div class="post-cover-image">
+            @{
+                var image_path = $"{base_path}/Image/{Model.CoverImagePath}";
+            }
+            <img src="@image_path" />
+            <span class="title">@Model.Title</span>
+        </div>
+    }
+    else
+    {
+        <p class="title-without-img">@Model.Title</p>
+    }
     <div class="post-body">
         @Html.Raw(Model.Content)
     </div>
@@ -38,32 +38,19 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div class="comment-section">
-        @await Component.InvokeAsync("Comment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0, Message = "" })
-        @foreach (var c in Model.MainComments)
-        {
-            <p>
-                @c.Message  [created on @c.Created]
-            </p>
-            <div class="sub-comment-section">
-                <h4>Sub Comments</h4>
-                
-                @await Component.InvokeAsync("Comment", new CommentViewModel { PostId = Model.Id, MainCommentId = 0, Message = "" })
-                
-                @foreach (var sc in c.SubComments)
-                {
-                    <p>
-                        @sc.Message  [created on @sc.Created]
-                    </p>
-                }
-            </div>
-         }
-
-    </div>
+    <div class="container">
+    @{
+        await Html.RenderPartialAsync("_Comment", new CommentViewModel { PostId = Model.Id, ParentCommentId = 0 });
+    }
+    @foreach (var c in Model.Comments.Where(c => c.ParentCommentId == 0))
+    {
+        @await Component.InvokeAsync("Comment", new CommentViewModel { PostId=c.PostId, Id = c.Id, Created = c.Created, Message = c.Message, ParentCommentId = 0, Username = c.Username })
+    }
+</div>
 }
 else
 {
-    <div >
-        <a asp-action="Login" asp-controller="Auth">Sign In to comment</a>
+    <div>
+        <a asp-action="Login" asp-controller="Auth">Sign In to view comments</a>
     </div>
 }
