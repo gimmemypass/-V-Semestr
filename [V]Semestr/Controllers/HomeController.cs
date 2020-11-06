@@ -21,19 +21,19 @@ namespace _V_Semestr.Controllers
     {
         private IPostRepository _postRepo;
         private IFileManager _fileManager;
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<User> _userManager;
 
         public HomeController(
             IPostRepository repo,
             IFileManager fileManager,
-            UserManager<IdentityUser> userManager)
+            UserManager<User> userManager)
         {
             _postRepo = repo;
             _fileManager = fileManager;
             _userManager = userManager;
         }
 
-        private Task<IdentityUser> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
+        private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
 
         [Route("/")]
         public IActionResult Index(int pageNumber, string category, string search)

@@ -13,6 +13,7 @@ namespace _V_Semestr.Models.Identity
         public string FirstName { get; set; }
         public string SecondName { get; set; }
         public ICollection<Comment> Comments { get; set; }
+        public int Description { get; set; }
         
     }
 }

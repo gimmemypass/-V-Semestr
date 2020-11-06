@@ -56,49 +56,23 @@
                             <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="Index"><i class="fa fa-star-o"></i>&nbsp;Admin Panel</a></li>
                          }
                         
-                        @if (User.Identity.IsAuthenticated)
+                        @if (!User.Identity.IsAuthenticated)
                          {
-                            <li class="nav-item"><p class="nav-link" style="color: white;">
-                                (@User.Identity.Name)
-                           </p></li>
-                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Logout" ><i class="fa fa-sign-in"></i>&nbsp;Log Out</a></li>
-                        }
+                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Login" ><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
+                         }
                         else
                         {
+                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Logout" ><i class="fa fa-sign-in"></i>&nbsp;Log Out</a></li>
+                           <li class="nav-item"><p class="nav-link" style="color: white;">
+                                (@User.Identity.Name)
+                           </p></li>
 
-                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Login" ><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
                         }
                     </ul>
                 </div>
             </div>
         </nav>
     </div>
-    @*@<div>
-            <nav>
-                @{
-                (Model.GetType().Name != "IndexViewModel").ToString();
-                }
-                <a asp-controller="Test" asp-action="Index">Test</a>
-                <a asp-controller="Home" asp-action="Index">Home</a>
-                <a asp-controller="Panel" asp-action="EditPost">New Post</a>
-                <a asp-controller="Panel" asp-action="EditCategory">New Category</a>
-                @if (User.Identity.IsAuthenticated)
-                {
-                <p style="color: white;">
-                    @User.Identity.Name
-                </p>
-                @if (User.IsInRole("Admin"))
-                {
-                <a asp-controller="Panel" asp-action="Index">Admin Panel</a>
-                }
-                <a asp-controller="Auth" asp-action="Logout">(Log out)</a>
-                }
-                else
-                {
-                <a asp-controller="Auth" asp-action="Login">Sign In</a>
-                }
-            </nav>
-        </div>*@
     <div>
         @RenderBody()
     </div>

@@ -9,20 +9,27 @@ namespace _V_Semestr.ViewModel
 {
     public class RegisterViewModel
     {
-        [Required]
+        [Required(ErrorMessage ="Поле не может быть пустым")]
         public string UserName { get; set; } 
 
-        [Required]
-        [DataType(DataType.EmailAddress)]
+        [Required(ErrorMessage = "Поле не может быть пустым" )]
+        [DataType(DataType.EmailAddress, ErrorMessage ="Неверно указан Email" )]
         public string Email { get; set; } 
 
-        [Required]
-        [DataType(DataType.Password)]
+        [Required(ErrorMessage ="Поле не может быть пустым")]
+        [DataType(DataType.Password, ErrorMessage ="Неверный формат пароля(минимум длина - 6)")]
         public string Password { get; set; } 
 
-        [Required]
-        [DataType(DataType.Password)]
-        [Compare("Password")]
+        [Required(ErrorMessage = "Поле не может быть пустым")]
+        [DataType(DataType.Password, ErrorMessage ="Неверный формат пароля(минимум длина - 6)")]
+        [Compare("Password", ErrorMessage = "Пароли должны совпадать")]
         public string ConfirmPassword { get; set; } 
+
+        [Required(ErrorMessage ="Поле не может быть пустым")]
+        public string FirstName { get; set; }
+
+        [Required(ErrorMessage ="Поле не может быть пустым")]
+        public string SecondName { get; set; }
+
     }
 }

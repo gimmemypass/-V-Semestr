@@ -17,6 +17,7 @@ using Microsoft.AspNetCore.Identity;
 using _V_Semestr.Data.FileManager;
 using _V_Semestr.Configuration;
 using _V_Semestr.Services.Email;
+using _V_Semestr.Models.Identity;
 
 namespace _V_Semestr
 {
@@ -35,7 +36,7 @@ namespace _V_Semestr
             services.Configure<SmtpSettings>(Configuration.GetSection("SmtpSettings"));
 
             services.AddDbContext<AppDbContext>(options => options.UseSqlServer(Configuration["DefaultConnection"]));
-            services.AddIdentity<IdentityUser, IdentityRole>(options =>
+            services.AddIdentity<User, IdentityRole>(options =>
             {
                 options.Password.RequireDigit = false;
                 options.Password.RequireNonAlphanumeric = false;

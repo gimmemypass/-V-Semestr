@@ -9,7 +9,10 @@ namespace _V_Semestr.ViewModel
 {
     public class LoginViewModel
     {
+       [Required(ErrorMessage ="Поле не может быть пустым")]
        public string UserName { get; set; } 
+
+       [Required(ErrorMessage ="Поле не может быть пустым")]
        [DataType(DataType.Password)]
        public string Password { get; set; } 
     }

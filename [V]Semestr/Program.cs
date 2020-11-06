@@ -9,6 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using _V_Semestr.Data;
 using Microsoft.AspNetCore.Identity;
+using _V_Semestr.Models.Identity;
 
 namespace _V_Semestr
 {
@@ -23,7 +24,7 @@ namespace _V_Semestr
                 var scope = host.Services.CreateScope();
 
                 var ctx = scope.ServiceProvider.GetRequiredService<AppDbContext>();
-                var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<IdentityUser>>();
+                var userMgr = scope.ServiceProvider.GetRequiredService<UserManager<User>>();
                 var roleMgr = scope.ServiceProvider.GetRequiredService<RoleManager<IdentityRole>>();
 
                 ctx.Database.EnsureCreated();
@@ -37,7 +38,7 @@ namespace _V_Semestr
                 if (!ctx.Users.Any(u => u.UserName == "admin"))
                 {
                     //create an admin
-                    var adminUser = new IdentityUser
+                    var adminUser = new User
                     {
                         UserName = "admin",
                         Email = "admin@test.com"

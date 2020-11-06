@@ -10,6 +10,16 @@
         <span class="text" asp-validation-for="UserName"></span>
     </div>
     <div>
+        <label class="text">First Name</label>
+        <input asp-for="FirstName" />
+        <span class="text" asp-validation-for="FirstName"></span>
+    </div>
+    <div>
+        <label class="text">Second Name</label>
+        <input asp-for="SecondName" />
+        <span class="text" asp-validation-for="SecondName"></span>
+    </div>
+    <div>
         <label class="text">E-Mail</label>
         <input asp-for="Email" />
         <span class="text" asp-validation-for="Email"></span>
@@ -24,6 +34,7 @@
         <input asp-for="ConfirmPassword" />
         <span class="text" asp-validation-for="ConfirmPassword"></span>
     </div>
+
     <div>
         <input type="submit" value="Sign Up" />
     </div>

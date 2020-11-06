@@ -1,4 +1,5 @@
-﻿using _V_Semestr.Services.Email;
+﻿using _V_Semestr.Models.Identity;
+using _V_Semestr.Services.Email;
 using _V_Semestr.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -12,13 +13,13 @@ namespace _V_Semestr.Controllers
 {
     public class AuthController : Controller
     {
-        private SignInManager<IdentityUser> _signInManager;
-        private UserManager<IdentityUser> _userManager;
+        private SignInManager<User> _signInManager;
+        private UserManager<User> _userManager;
         private IEmailService _emailService;
 
         public AuthController(
-           SignInManager<IdentityUser> signInManager,
-           UserManager<IdentityUser> userManager,
+           SignInManager<User> signInManager,
+           UserManager<User> userManager,
            IEmailService emailService)
         {
             _signInManager = signInManager;
@@ -34,6 +35,10 @@ namespace _V_Semestr.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginViewModel vm)
         {
+            if (!ModelState.IsValid)
+            {
+                return View(vm);
+            }
             var result = await _signInManager.PasswordSignInAsync(vm.UserName, vm.Password, false, false);
 
             if (!result.Succeeded)
@@ -69,10 +74,13 @@ namespace _V_Semestr.Controllers
             {
                 return View(vm);
             }
-            var user = new IdentityUser
+            var user = new User
             {
                 UserName = vm.UserName,
                 Email = vm.Email,
+                FirstName = vm.FirstName,
+                SecondName = vm.SecondName
+                
             };
             var result = await _userManager.CreateAsync(user, vm.Password);
             if (result.Succeeded)
