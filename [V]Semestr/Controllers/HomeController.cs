@@ -9,10 +9,8 @@ using _V_Semestr.Models;
 using _V_Semestr.Data;
 using _V_Semestr.Data.Repository;
 using _V_Semestr.Data.FileManager;
-using _V_Semestr.Models.Comments;
 using _V_Semestr.ViewModel;
 using System.Security.Claims;
-using _V_Semestr.Models.Identity;
 using Microsoft.AspNetCore.Identity;
 
 namespace _V_Semestr.Controllers
@@ -43,8 +41,9 @@ namespace _V_Semestr.Controllers
             return View(vm);
         }
 
-        public IActionResult Post(int id)
+        public async Task<IActionResult> Post(int id)
         {
+            var currentUser = await GetCurrentUserAsync();
             var post = _postRepo.GetPost(id);
             return View(post);
         }
@@ -75,10 +74,6 @@ namespace _V_Semestr.Controllers
                 PostId = vm.PostId,
                 Shown = false,
             };
-            //var post = _postRepo.GetPost(vm.PostId);
-            //post.Comments = post.Comments ?? new List<Comment>();
-            //post.Comments.Add(comment);
-            //_postRepo.UpdatePost(post);
             _postRepo.AddComment(comment);
             await _postRepo.SaveChangesAsync();
             return RedirectToAction("Post", new { id = vm.PostId });

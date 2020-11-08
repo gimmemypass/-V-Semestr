@@ -6,8 +6,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-using _V_Semestr.Models.Comments;
-using _V_Semestr.Models.Identity;
 
 namespace _V_Semestr.Data
 {

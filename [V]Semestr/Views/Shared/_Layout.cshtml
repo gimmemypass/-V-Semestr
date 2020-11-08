@@ -6,16 +6,23 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="~/lib/bootstrap/css/bootstrap.css" rel="stylesheet" />
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Playfair+Display:400,700">
+    <link href="~/css/Footer-Basic.css" rel="stylesheet" />
     <script src="~/lib/bootstrap/js/bootstrap.js"></script>
     <script src="~/lib/jquery/jquery.js"></script>
+
     <title>@ViewBag.Title</title>
+
     <meta name="description" content="@ViewBag.Description" />
     <meta name="keywords" content="@ViewBag.Keywords" />
+
     <link href="~/fonts/font-awesome.min.css" rel="stylesheet" />
+    <link href="~/fonts/ionicons.min.css" rel="stylesheet" />
     <environment include="Production">
+        <link href="~/lib/font-awesome/css/fontawesome.min.css" rel="stylesheet" />
         <link href="~/css/site.min.css" rel="stylesheet" />
     </environment>
     <environment include="Development">
+        <link href="~/lib/font-awesome/css/fontawesome.css" rel="stylesheet" />
         <link href="~/css/site.css" rel="stylesheet" />
     </environment>
 
@@ -52,20 +59,22 @@
                         <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="EditPost"><i class="fa fa-wpexplorer"></i>&nbsp;New Post</a></li>
                         <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="EditCategory"><i class="fa fa-star-o"></i>&nbsp;New Category</a></li>
                         @if (User.IsInRole("Admin"))
-                         {
+                        {
                             <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Panel" asp-action="Index"><i class="fa fa-star-o"></i>&nbsp;Admin Panel</a></li>
-                         }
-                        
+                        }
+
                         @if (!User.Identity.IsAuthenticated)
-                         {
-                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Login" ><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
-                         }
+                        {
+                            <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Login"><i class="fa fa-sign-in"></i>&nbsp;Sign In</a></li>
+                        }
                         else
                         {
-                           <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Logout" ><i class="fa fa-sign-in"></i>&nbsp;Log Out</a></li>
-                           <li class="nav-item"><p class="nav-link" style="color: white;">
-                                (@User.Identity.Name)
-                           </p></li>
+                            <li class="nav-item"><a class="nav-link active" style="color:#ffffff;" asp-controller="Auth" asp-action="Logout"><i class="fa fa-sign-in"></i>&nbsp;Log Out</a></li>
+                            <li class="nav-item">
+                                <p class="nav-link" style="color: white;">
+                                    (@User.Identity.Name)
+                                </p>
+                            </li>
 
                         }
                     </ul>
@@ -77,5 +86,23 @@
         @RenderBody()
     </div>
     @RenderSection("scripts", false)
+    <div class="footer-basic" style="background: rgb(21, 21, 21);">
+        <footer>
+            <div class="social">
+                <a href="#"><i class="icon fa fa-vk" style="color: rgb(255,255,255);"></i></a>
+                <a href="#"><i class="icon fa fa-instagram" style="color: rgb(255,255,255);"></i></a>
+                <a href="#"><i class="icon fa fa-github" style="color: rgb(255,255,255);"></i></a>
+                <a href="#"><i class="icon fa fa-telegram" style="color: rgb(255,255,255);"></i></a>
+            </div>
+            <ul class="list-inline">
+                <li class="list-inline-item"><a asp-controller="Home" asp-action="Index" style="color: rgb(255,255,255);">Home</a></li>
+                <li class="list-inline-item"><a href="#" style="color: rgb(255,255,255);">Services</a></li>
+                <li class="list-inline-item"><a href="#" style="color: rgb(255,255,255);">About</a></li>
+                <li class="list-inline-item"><a href="#" style="color: rgb(255,255,255);">Terms</a></li>
+                <li class="list-inline-item"><a href="#" style="color: rgb(255,255,255);">Privacy Policy</a></li>
+            </ul>
+            <p class="copyright">Time to make a Game © 2020</p>
+        </footer>
+    </div>
 </body>
 </html>

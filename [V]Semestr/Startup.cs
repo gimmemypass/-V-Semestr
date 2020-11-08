@@ -17,7 +17,8 @@ using Microsoft.AspNetCore.Identity;
 using _V_Semestr.Data.FileManager;
 using _V_Semestr.Configuration;
 using _V_Semestr.Services.Email;
-using _V_Semestr.Models.Identity;
+using _V_Semestr.Models;
+using _V_Semestr.Hubs;
 
 namespace _V_Semestr
 {
@@ -57,7 +58,7 @@ namespace _V_Semestr
             services.AddTransient<ICategoryRepository, CategoryRepository>();
             services.AddTransient<IFileManager, FileManager>();
             services.AddSingleton<IEmailService, EmailService>();
-
+            services.AddSignalR();
             services.AddMvc(option => {
                 option.EnableEndpointRouting = false;
                 option.CacheProfiles.Add("Monthly", new Microsoft.AspNetCore.Mvc.CacheProfile { Duration = 60 * 60 * 24 * 7 * 4 });
@@ -77,6 +78,10 @@ namespace _V_Semestr
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            app.UseEndpoints(endpoint =>
+            {
+                endpoint.MapHub<CommentHub>("/Home/Post");
+            });
             app.UseMvcWithDefaultRoute();
         }
     }

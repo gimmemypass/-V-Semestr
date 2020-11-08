@@ -9,7 +9,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using _V_Semestr.Data;
 using Microsoft.AspNetCore.Identity;
-using _V_Semestr.Models.Identity;
+using _V_Semestr.Models;
 
 namespace _V_Semestr
 {
@@ -30,10 +30,14 @@ namespace _V_Semestr
                 ctx.Database.EnsureCreated();
 
                 var adminRole = new IdentityRole("Admin");
+                var superAdminRole = new IdentityRole("SuperAdmin");
+                var moderatorRole = new IdentityRole("Moderator");
                 if (!ctx.Roles.Any())
                 {
                     //create a role
                     roleMgr.CreateAsync(adminRole).GetAwaiter().GetResult();
+                    roleMgr.CreateAsync(superAdminRole).GetAwaiter().GetResult();
+                    roleMgr.CreateAsync(moderatorRole).GetAwaiter().GetResult();
                 }
                 if (!ctx.Users.Any(u => u.UserName == "admin"))
                 {
@@ -53,7 +57,6 @@ namespace _V_Semestr
             {
                 Console.WriteLine(e.Message);
             }
-
             host.Run();
         }
 

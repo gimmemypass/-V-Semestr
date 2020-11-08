@@ -5,7 +5,7 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace _V_Semestr.Models.Comments
+namespace _V_Semestr.Models
 {
     public class Comment : Model
     {

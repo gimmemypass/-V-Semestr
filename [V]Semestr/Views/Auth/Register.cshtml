@@ -4,6 +4,7 @@
 }
 
 <form class="sign-in-form" asp-controller="Auth" asp-action="Register" method="post">
+    <div class="validation text" asp-validation-summary="ModelOnly"></div>
     <div>
         <label class="text">Username</label>
         <input asp-for="UserName" />

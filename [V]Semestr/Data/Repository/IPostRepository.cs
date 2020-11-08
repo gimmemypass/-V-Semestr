@@ -4,7 +4,6 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using _V_Semestr.Models;
-using _V_Semestr.Models.Comments;
 using _V_Semestr.ViewModel;
 
 namespace _V_Semestr.Data.Repository

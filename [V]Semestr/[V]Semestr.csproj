@@ -43,6 +43,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <Folder Include="Models\Identity\" />
     <Folder Include="wwwroot\content\blog\" />
   </ItemGroup>
 

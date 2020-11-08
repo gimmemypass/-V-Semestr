@@ -1,4 +1,4 @@
-﻿using _V_Semestr.Models.Identity;
+﻿using _V_Semestr.Models;
 using _V_Semestr.Services.Email;
 using _V_Semestr.ViewModel;
 using Microsoft.AspNetCore.Identity;
@@ -88,6 +88,10 @@ namespace _V_Semestr.Controllers
                 await _signInManager.SignInAsync(user, false);
                 //await _emailService.SendEmail(user.Email, "Welcom", "Thank you for registering!");
                 return RedirectToAction("Index", "Home");
+            }
+            foreach(var error in result.Errors)
+            {
+                ModelState.AddModelError(string.Empty, error.Description);
             }
             return View(vm);
         }
