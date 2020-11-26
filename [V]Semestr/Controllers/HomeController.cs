@@ -12,6 +12,8 @@ using _V_Semestr.Data.FileManager;
 using _V_Semestr.ViewModel;
 using System.Security.Claims;
 using Microsoft.AspNetCore.Identity;
+using _V_Semestr.Hubs;
+using Microsoft.AspNetCore.SignalR;
 
 namespace _V_Semestr.Controllers
 {
@@ -20,15 +22,20 @@ namespace _V_Semestr.Controllers
         private IPostRepository _postRepo;
         private IFileManager _fileManager;
         private readonly UserManager<User> _userManager;
+        private IHubContext<CommentHub> _hubContext;
 
         public HomeController(
             IPostRepository repo,
             IFileManager fileManager,
-            UserManager<User> userManager)
+            UserManager<User> userManager,
+            IHubContext<CommentHub> hubContext
+            )
+
         {
             _postRepo = repo;
             _fileManager = fileManager;
             _userManager = userManager;
+            _hubContext = hubContext;
         }
 
         private Task<User> GetCurrentUserAsync() => _userManager.GetUserAsync(HttpContext.User);
@@ -60,25 +67,54 @@ namespace _V_Semestr.Controllers
         {
             var user = await GetCurrentUserAsync();
             vm.Username = user.UserName;
+            vm.Created = DateTime.Now;
             if (!ModelState.IsValid)
             {
-                return RedirectToAction("Post", new { id = vm.PostId });
+                //return RedirectToAction("Post", new { id = vm.PostId });
+                return BadRequest("Неправильно введены данные комментария");
             }
             var comment = new Comment
             {
                 Message = vm.Message,
-                Created = DateTime.Now,
-                Updated = DateTime.Now,
+                Created = vm.Created,
+                Updated = vm.Created,
                 ParentCommentId = vm.ParentCommentId,
                 Username = vm.Username,
                 PostId = vm.PostId,
-                Shown = false,
+                Shown = true,
             };
             _postRepo.AddComment(comment);
             await _postRepo.SaveChangesAsync();
-            return RedirectToAction("Post", new { id = vm.PostId });
+            vm.Id = comment.Id;
+            await _hubContext.Clients.Group(vm.PostId.ToString())
+                .SendAsync("ReceiveComment", new
+                {
+                    Message = vm.Message,
+                    Created = vm.Created.ToString("dd/MM/yyyy hh:mm:ss"),
+                    ParentCommentId = vm.ParentCommentId,
+                    Username = vm.Username,
+                    PostId = vm.PostId,   
+                    Id = vm.Id
+                });
+            //return RedirectToAction("Post", new { id = vm.PostId });
+            return Ok("tutto ok");
 
         }
+
+        [HttpPost("[controller]/[action]/{connectionId}/{postId}")]
+        public async Task<IActionResult> JoinCommentChat(string connectionId, string postId)
+        {
+            await _hubContext.Groups.AddToGroupAsync(connectionId, postId);
+            return Ok();
+        }
+
+        [HttpPost("[controller]/[action]/{connectionId}/{postId}")]
+        public async Task<IActionResult> LeaveCommentChat(string connectionId, string postId)
+        {
+            await _hubContext.Groups.RemoveFromGroupAsync(connectionId, postId);
+            return Ok();
+        }
+
         public IActionResult Privacy()
         {
             return View();

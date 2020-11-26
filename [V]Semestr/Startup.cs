@@ -19,6 +19,12 @@ using _V_Semestr.Configuration;
 using _V_Semestr.Services.Email;
 using _V_Semestr.Models;
 using _V_Semestr.Hubs;
+using System.Globalization;
+using Microsoft.AspNetCore.Mvc.Localization;
+using Microsoft.Extensions.Localization;
+using Microsoft.Extensions.Options;
+using Microsoft.AspNetCore.Mvc.Razor;
+using Microsoft.AspNetCore.Localization;
 
 namespace _V_Semestr
 {
@@ -59,11 +65,16 @@ namespace _V_Semestr
             services.AddTransient<IFileManager, FileManager>();
             services.AddSingleton<IEmailService, EmailService>();
             services.AddSignalR();
-            services.AddMvc(option => {
+            services.AddLocalization(options => options.ResourcesPath = "Resources");
+
+            services.AddMvc(option =>
+            {
                 option.EnableEndpointRouting = false;
                 option.CacheProfiles.Add("Monthly", new Microsoft.AspNetCore.Mvc.CacheProfile { Duration = 60 * 60 * 24 * 7 * 4 });
-            });
-            
+            })
+                .AddViewLocalization();
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -74,13 +85,27 @@ namespace _V_Semestr
             }
                 app.UseDeveloperExceptionPage();
 
+            var supportedCultures = new[]
+            {
+                new CultureInfo("en"),
+                new CultureInfo("ru")
+            };
+            app.UseRequestLocalization(new RequestLocalizationOptions
+            {
+                DefaultRequestCulture = new RequestCulture("en"),
+                SupportedCultures = supportedCultures,
+                SupportedUICultures = supportedCultures
+            });
             app.UseStaticFiles();
             app.UseRouting();
             app.UseAuthentication();
             app.UseAuthorization();
+            //get culture information based on web browser
+            var options = app.ApplicationServices.GetService<IOptions<RequestLocalizationOptions>>();
+            app.UseRequestLocalization(options.Value);
             app.UseEndpoints(endpoint =>
             {
-                endpoint.MapHub<CommentHub>("/Home/Post");
+                endpoint.MapHub<CommentHub>("/commentHub");
             });
             app.UseMvcWithDefaultRoute();
         }

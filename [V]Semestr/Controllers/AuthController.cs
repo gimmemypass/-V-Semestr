@@ -3,6 +3,7 @@ using _V_Semestr.Services.Email;
 using _V_Semestr.ViewModel;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Localization;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -16,12 +17,15 @@ namespace _V_Semestr.Controllers
         private SignInManager<User> _signInManager;
         private UserManager<User> _userManager;
         private IEmailService _emailService;
+        private IStringLocalizer<AuthController> _localizer;
 
         public AuthController(
+            IStringLocalizer<AuthController> localizer,
            SignInManager<User> signInManager,
            UserManager<User> userManager,
            IEmailService emailService)
         {
+            _localizer = localizer;
             _signInManager = signInManager;
             _userManager = userManager;
             _emailService = emailService;
@@ -86,7 +90,7 @@ namespace _V_Semestr.Controllers
             if (result.Succeeded)
             {
                 await _signInManager.SignInAsync(user, false);
-                //await _emailService.SendEmail(user.Email, "Welcom", "Thank you for registering!");
+                await _emailService.SendEmailAsync(user.Email, "Welcom", "Thank you for registering!");
                 return RedirectToAction("Index", "Home");
             }
             foreach(var error in result.Errors)

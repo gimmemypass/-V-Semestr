@@ -11,9 +11,11 @@
 
   <ItemGroup>
     <_ContentIncludedByDefault Remove="bundleconfig.json" />
+    <_ContentIncludedByDefault Remove="wwwroot\css\site.min.css" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Localization.AspNetCore.TagHelpers" Version="0.6.0" />
     <PackageReference Include="Markdig" Version="0.21.1" />
     <PackageReference Include="Microsoft.AspNetCore.Identity" Version="2.2.0" />
     <PackageReference Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore" Version="3.1.8" />
@@ -24,7 +26,9 @@
       <PrivateAssets>all</PrivateAssets>
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
+    <PackageReference Include="Microsoft.Extensions.Localization" Version="5.0.0" />
     <PackageReference Include="Microsoft.VisualStudio.Web.CodeGeneration.Design" Version="3.1.4" />
+    <PackageReference Include="NETCore.MailKit" Version="2.0.3" />
     <PackageReference Include="PhotoSauce.MagicScaler" Version="0.11.1" />
     <PackageReference Include="Pomelo.EntityFrameworkCore.MySql" Version="3.2.1" />
   </ItemGroup>
@@ -44,7 +48,33 @@
 
   <ItemGroup>
     <Folder Include="Models\Identity\" />
+    <Folder Include="Resources\Controllers\" />
+    <Folder Include="Resources\_V_Semestr\Controllers\" />
     <Folder Include="wwwroot\content\blog\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Compile Update="Resources\Views\Auth\Login\en.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>en.resx</DependentUpon>
+    </Compile>
+    <Compile Update="Resources\Views\Auth\Login\ru.Designer.cs">
+      <DesignTime>True</DesignTime>
+      <AutoGen>True</AutoGen>
+      <DependentUpon>ru.resx</DependentUpon>
+    </Compile>
+  </ItemGroup>
+
+  <ItemGroup>
+    <EmbeddedResource Update="Resources\Views\Auth\Login\en.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>en.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
+    <EmbeddedResource Update="Resources\Views\Auth\Login\ru.resx">
+      <Generator>PublicResXFileCodeGenerator</Generator>
+      <LastGenOutput>ru.Designer.cs</LastGenOutput>
+    </EmbeddedResource>
   </ItemGroup>
 
 

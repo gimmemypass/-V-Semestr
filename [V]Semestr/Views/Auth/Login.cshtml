@@ -1,20 +1,23 @@
 ﻿@model LoginViewModel
+@using Microsoft.AspNetCore.Mvc.Localization
+@inject IViewLocalizer Localizer
 
 @{ 
-
+    var a = Localizer["SignIn"];
 }
 
 <form class="sign-in-form" asp-controller="Auth" asp-action="Login" method="post">
     <div>
-        <label class="text">Username</label>
+        <label class="text">@Localizer["Username"]</label>
+        
         <input asp-for="UserName" />
     </div>
     <div>
-        <label class="text">Password</label>
+        <label class="text">@Localizer["Password"]</label>
         <input asp-for="Password" />
     </div>
     <div>
-        <input type="submit" value="Sign In" />
-        <a asp-controller="Auth" asp-action="Register">Register</a>
+        <input type="submit"  value=@Localizer["SignIn"] />
+        <a asp-controller="Auth" asp-action="Register">@Localizer["Register"]</a>
     </div>
 </form>

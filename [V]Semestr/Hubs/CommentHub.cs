@@ -10,11 +10,8 @@ namespace _V_Semestr.Hubs
 {
     public class CommentHub : Hub
     {
-        public async Task AddComment(Comment comment)
-        {
-            await Clients.All.SendAsync("", comment);
-        }
-
+        public string GetConnectionId() =>
+            Context.ConnectionId;
 
     }
 }

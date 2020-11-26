@@ -92,14 +92,10 @@ namespace _V_Semestr.Data.Repository
                                         || EF.Functions.Like(x.Content, $"%{search}%")
                                         || EF.Functions.Like(x.Desciption, $"%{search}%")
                                         || EF.Functions.Like(x.Tags, $"%{search}%"));
-                //query = query.Where(x => x.Title.Contains(search) 
-                //                       || x.Content.Contains(search)
-                //                       || x.Desciption.Contains(search)
-                //                       || x.Tags.Contains(search));
             }
             var postCount = query.Count();
             var pageCount = (int)Math.Ceiling((double)postCount / pageSize);
-            if (pageNumber > pageCount) pageNumber = pageCount;
+            if (pageNumber > pageCount && pageCount != 0) pageNumber = pageCount;
             var posts = query
                         .Skip(pageSize * (pageNumber - 1))
                         .Take(pageSize)
@@ -119,7 +115,7 @@ namespace _V_Semestr.Data.Repository
 
         public void AddComment(Comment comment)
         {
-            _ctx.Comments.Add(comment);
+           _ctx.Comments.Add(comment);
         }
 
         public List<Comment> GetCommentsByPostId(int postId)

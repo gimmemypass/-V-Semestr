@@ -38,19 +38,159 @@
 
 @if (User.Identity.IsAuthenticated)
 {
-    <div class="container">
-    @{
-        await Html.RenderPartialAsync("_Comment", new CommentViewModel { PostId = Model.Id, ParentCommentId = 0 });
-    }
-    @foreach (var c in Model.Comments.Where(c => c.ParentCommentId == 0))
-    {
-        @await Component.InvokeAsync("Comment", new CommentViewModel { PostId=c.PostId, Id = c.Id, Created = c.Created, Message = c.Message, ParentCommentId = 0, Username = c.Username })
-    }
-</div>
+    <div id="commentSection" class="container">
+        @{
+            await Html.RenderPartialAsync("_Comment", new CommentViewModel { PostId = Model.Id, ParentCommentId = 0 });
+        }
+        @foreach (var c in Model.Comments.Where(c => c.ParentCommentId == 0))
+        {
+            @await Component.InvokeAsync("Comment", new CommentViewModel { PostId = c.PostId, Id = c.Id, Created = c.Created, Message = c.Message, ParentCommentId = 0, Username = c.Username })
+        }
+    </div>
 }
 else
 {
     <div>
         <a asp-action="Login" asp-controller="Auth">Sign In to view comments</a>
     </div>
+}
+
+@section scripts {
+    <script src="~/signalr/signalr.min.js"></script>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script>
+        var connection = new signalR.HubConnectionBuilder()
+            .withUrl("/commentHub")
+            .build();
+
+        var _connectionId = '';
+
+        connection.on("ReceiveComment", function (comment) {
+            console.log(comment);
+            try {
+                var card = document.createElement("div");
+                card.classList.add("card", "card-inner");
+                var card_body = document.createElement("div");
+                card_body.classList.add("card-body");
+                var row = document.createElement("div");
+                row.classList.add("row");
+                var user = document.createElement("div");
+                user.classList.add("col-md-2");
+                var p = document.createElement("p");
+                p.appendChild(document.createElement("strong").appendChild(document.createTextNode(comment.username)));
+                var p_date = document.createElement("p");
+                p_date.classList.add("text-secondary", "text-center");
+                p_date.appendChild(document.createTextNode(comment.created));
+                user.appendChild(p);
+                user.appendChild(p_date);
+                var message = document.createElement("div");
+                message.classList.add("col-md-10");
+                var p_message = document.createElement("p");
+                //p_message.classList.add("text");
+                p_message.appendChild(document.createTextNode(comment.message));
+                message.appendChild(p_message);
+                //p buttons
+                var p_buttons = document.createElement("p");
+                var buttonLike = document.createElement("a");
+                var buttonReply = document.createElement("a");
+                buttonReply.classList.add("float-right", "btn", "btn-outline-primary", "ml-2");
+                buttonReply.setAttribute("onclick", `showReplyForm(${comment.id})`);
+                var i_reply = document.createElement("i");
+                i_reply.classList.add("fa", "fa-reply");
+                buttonReply.appendChild(i_reply);
+                buttonReply.appendChild(document.createTextNode("Reply"));
+                buttonLike.classList.add("float-right", "btn", "text-white", "btn-danger")
+                buttonLike.addEventListener("click", function () {
+                    //todo
+                });
+                var i_like = document.createElement("i");
+                i_like.classList.add("fa", "fa-heart");
+
+                buttonLike.appendChild(i_like);
+                p_buttons.appendChild(buttonReply);
+                p_buttons.appendChild(buttonLike);
+                message.appendChild(p_buttons);
+
+                //form
+                var form = document.createElement("form");
+                form.setAttribute("id", `replyForm_${comment.id}`);
+                form.addEventListener("submit", function (event) {
+                    addComment(event);
+                })
+                form.setAttribute("onsubmit", "addComment(event)");
+                form.method = "post";
+                form.style = "display: none";
+                form.setAttribute("action", "/Home/Comment");
+                var postIdInput = document.createElement("input");
+                postIdInput.setAttribute("asp-for", "PostId");
+                postIdInput.setAttribute("type", "hidden");
+                var parentIdInput = document.createElement("input");
+                parentIdInput.setAttribute("asp-for", "ParentCommentId");
+                parentIdInput.setAttribute("type", "hidden");
+                var messageInput = document.createElement("input");
+                messageInput.setAttribute("asp-for", "Message");
+                messageInput.setAttribute("value", "");
+                messageInput.classList.add("field-form");
+                var button = document.createElement("button");
+                button.type = "submit";
+                button.appendChild(document.createTextNode("Send"));
+                form.appendChild(postIdInput);
+                form.appendChild(parentIdInput);
+                form.appendChild(messageInput);
+                form.appendChild(button);
+
+                message.appendChild(form);
+                row.appendChild(user);
+                row.appendChild(message);
+                card_body.appendChild(row);
+                card.appendChild(card_body);
+                console.log(comment.parentCommentId);
+                if (comment.parentCommentId === 0) {
+                    document.getElementById("commentSection").appendChild(card);
+                }
+                else {
+                    document.getElementById(`comment_${comment.parentCommentId}`).appendChild(card);
+                }
+            } catch (err) {
+                console.error("пошло по ##### где-то", err);
+            }
+        })
+
+        var joinCommentChat = function () {
+            var url = '/Home/JoinCommentChat/'+ _connectionId +'/@Model.Id'
+            axios.post(url, null)
+                .then(res => {
+                    console.log("Comment Chat joined!", res);
+                })
+                .catch(err => {
+                    console.error("Failed to join the comment chat :( ", err);
+                })
+        }
+
+        connection.start()
+            .then(function () {
+                connection.invoke('getConnectionId')
+                    .then(function (connectionId) {
+                        _connectionId = connectionId;
+                        joinCommentChat()
+                    })
+            })
+            .catch(function (err) {
+                console.error(err);
+            })
+
+
+        var addComment = function (event) {
+            event.preventDefault();
+            var comment = new FormData(event.target);
+            axios.post('/Home/Comment', comment)
+                .then(res => {
+                    console.log("Comment sent!", res);
+                })
+                .catch(err => {
+                    console.log("Failed to send comment!", err);
+                })
+        }
+
+    </script>
 }
